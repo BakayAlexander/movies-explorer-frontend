@@ -1,20 +1,21 @@
 .navigation {
-	position: absolute;
-	bottom: 0;
-	margin-bottom: 30px;
+	margin-top: 150px;
+	display: grid;
+	gap: 10px;
+	grid-template-columns: repeat(3, 96px);
 }
 
 .navigation__link {
 	background-color: #303030;
 	color: white;
-	padding: 10px 17px;
 	text-decoration: none;
 	border-radius: 10px;
 	font-size: 12px;
 	font-weight: 500;
 	line-height: 16px;
 	transition: 0.1s ease-in;
-	margin-right: 10px;
+	padding: 10px 0;
+	text-align: center;
 }
 
 .navigation__link:hover {
@@ -27,15 +28,16 @@
 
 @media screen and (max-width: 768px) {
 	.navigation {
-		margin-bottom: 40px;
+		margin-top: 314px;
 	}
 }
 
 @media screen and (max-width: 600px) {
 	.navigation {
-		margin-bottom: 17px;
+		margin-top: 217px;
+		grid-template-columns: repeat(3, 82px);
 	}
 	.navigation__link {
-		padding: 5px 15.5px;
+		padding: 5px 0;
 	}
 }
