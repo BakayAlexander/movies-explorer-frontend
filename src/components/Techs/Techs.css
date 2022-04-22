@@ -4,9 +4,8 @@
 }
 
 .techs__container {
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
+	max-width: 1280px;
+	margin: 0 auto;
 }
 
 .techs__title {
@@ -19,6 +18,12 @@
 	max-width: calc(100% - 140px);
 	padding-top: 110px;
 	margin: 0 auto;
+}
+
+.techs__text-container {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
 }
 
 .techs__text-element {
@@ -76,7 +81,6 @@
 
 	.techs__title {
 		max-width: calc(100% - 90px);
-		border-color: #000000;
 		padding-top: 90px;
 		margin: 0 auto;
 	}
