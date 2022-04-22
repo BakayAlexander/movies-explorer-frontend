@@ -26,7 +26,6 @@
 .portfolio__link-container {
 	display: flex;
 	flex-direction: row;
-	width: calc(100% - 140px);
 	position: relative;
 	transition: 0.1s ease-in;
 }
@@ -62,4 +61,43 @@
 	top: 0;
 	bottom: 0;
 	right: 0;
+}
+
+@media screen and (max-width: 768px) {
+	.portfolio {
+		margin: 90px auto 90px auto;
+	}
+
+	.portfolio__title {
+		max-width: calc(100% - 90px);
+	}
+
+	.portfolio__links {
+		max-width: calc(100% - 90px);
+		margin-top: 50px;
+	}
+
+	.portfolio__link {
+		font-size: 28px;
+	}
+}
+
+@media screen and (max-width: 600px) {
+	.portfolio {
+		margin: 70px auto 70px auto;
+	}
+
+	.portfolio__title {
+		max-width: calc(100% - 28px);
+	}
+
+	.portfolio__links {
+		max-width: calc(100% - 28px);
+		margin-top: 40px;
+	}
+
+	.portfolio__link {
+		font-size: 18px;
+		line-height: 28px;
+	}
 }
