@@ -25,6 +25,7 @@ function SearchForm() {
 				<button className='search__form-button'></button>
 			</form>
 			<FilterCheckbox />
+			<hr className='search__decoration-line' />
 		</section>
 	);
 }
