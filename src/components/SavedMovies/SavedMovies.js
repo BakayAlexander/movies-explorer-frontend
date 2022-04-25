@@ -1,10 +1,10 @@
 import React from 'react';
+import MoviesCardList from '../MoviesCardList/MoviesCardList';
 import Preloader from '../Preloader/Preloader';
 import SearchForm from '../SearchForm/SearchForm';
-import MoviesCardList from '../MoviesCardList/MoviesCardList';
 
-function Movies(props) {
-	const staticFilms = props.films.slice(0, 12);
+function SavedMovies(props) {
+	const staticFilms = props.films.slice(12, 15);
 	return (
 		<section>
 			<SearchForm />
@@ -14,4 +14,4 @@ function Movies(props) {
 	);
 }
 
-export default Movies;
+export default SavedMovies;
