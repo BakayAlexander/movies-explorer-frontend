@@ -6,6 +6,7 @@
 	justify-content: center;
 	background-color: #222222;
 	border-radius: 6px;
+	overflow: hidden;
 }
 
 .movies-card__image {
@@ -34,6 +35,7 @@
 	font-weight: 500;
 	font-size: 13px;
 	margin: 0;
+	max-height: 30px;
 }
 
 .movies-card__duration {

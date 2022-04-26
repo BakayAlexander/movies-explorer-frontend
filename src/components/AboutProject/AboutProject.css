@@ -1,9 +1,10 @@
-.aboutProject {
+.about-project {
 	max-width: 1280px;
 	margin: 0 auto;
+	overflow-wrap: break-word;
 }
 
-.aboutProject__title {
+.about-project__title {
 	color: white;
 	font-size: 22px;
 	font-weight: 400;
@@ -12,34 +13,37 @@
 	padding-bottom: 23px;
 	max-width: calc(100% - 140px);
 	margin: 110px auto auto;
+	overflow: hidden;
 }
 
-.aboutProject__text-container {
+.about-project__text-container {
 	display: flex;
 	flex-direction: row;
 	gap: 40px;
 	margin: 70px 0 0 70px;
 }
 
-.aboutProject__text-element {
+.about-project__text-element {
 	max-width: 550px;
 }
 
-.aboutProject__text-title {
+.about-project__text-title {
 	font-size: 20px;
 	line-height: 24px;
 	margin: 0;
 	letter-spacing: -0.04em;
 	font-weight: 400;
+	overflow: hidden;
 }
 
-.aboutProject__text-subtitle {
+.about-project__text-subtitle {
 	font-size: 14px;
 	line-height: 20px;
 	margin: 26px 0 0 0;
+	overflow: hidden;
 }
 
-.aboutProject__scale {
+.about-project__scale {
 	list-style: none;
 	display: grid;
 	grid-template-columns: 1fr 4fr;
@@ -49,7 +53,7 @@
 	max-width: calc(100% - 140px);
 }
 
-.aboutProject__duration {
+.about-project__duration {
 	text-align: center;
 	background-color: #3ddc84;
 	color: #000000;
@@ -58,12 +62,12 @@
 	line-height: 17px;
 }
 
-.aboutProject__duration_frontend {
+.about-project__duration_frontend {
 	background-color: #303030;
 	color: #ffffff;
 }
 
-.aboutProject__dev-type {
+.about-project__dev-type {
 	text-align: center;
 	color: #8b8b8b;
 	font-size: 14px;
@@ -71,60 +75,60 @@
 }
 
 @media screen and (max-width: 768px) {
-	.aboutProject__title {
+	.about-project__title {
 		margin: 90px auto auto;
 		max-width: calc(100% - 90px);
 	}
 
-	.aboutProject__text-container {
+	.about-project__text-container {
 		margin-right: 50px;
 		gap: 30px;
 	}
 
-	.aboutProject__text-element {
+	.about-project__text-element {
 		max-width: 319px;
 	}
 
-	.aboutProject__text-subtitle {
+	.about-project__text-subtitle {
 		font-size: 12px;
 		line-height: 18px;
 		margin: 22px 0 0 0;
 	}
 
-	.aboutProject__scale {
+	.about-project__scale {
 		max-width: calc(100% - 90px);
 	}
 }
 
 @media screen and (max-width: 600px) {
-	.aboutProject__title {
+	.about-project__title {
 		margin: 70px auto auto;
 		max-width: calc(100% - 20px);
 		padding-bottom: 28px;
 	}
 
-	.aboutProject__text-container {
+	.about-project__text-container {
 		margin: 60px 0 0 18px;
 		flex-direction: column;
 		gap: 56px;
 	}
 
-	.aboutProject__text-element {
+	.about-project__text-element {
 		max-width: 350px;
 	}
 
-	.aboutProject__text-title {
+	.about-project__text-title {
 		font-size: 18px;
 		line-height: 22px;
 	}
 
-	.aboutProject__text-subtitle {
+	.about-project__text-subtitle {
 		font-size: 11px;
 		line-height: 16px;
 		margin: 16px 0 0 0;
 	}
 
-	.aboutProject__scale {
+	.about-project__scale {
 		grid-template-columns: 1fr 2fr;
 		grid-row-gap: 10px;
 		padding: 0;
@@ -132,13 +136,13 @@
 		max-width: calc(100% - 20px);
 	}
 
-	.aboutProject__duration {
+	.about-project__duration {
 		padding: 11px 0;
 		font-size: 11px;
 		line-height: 13px;
 	}
 
-	.aboutProject__dev-type {
+	.about-project__dev-type {
 		text-align: center;
 		color: #8b8b8b;
 		font-size: 14px;
@@ -147,11 +151,11 @@
 }
 
 @media screen and (max-width: 375px) {
-	.aboutProject__text-element {
+	.about-project__text-element {
 		max-width: 284px;
 	}
 
-	.aboutProject__scale {
+	.about-project__scale {
 		max-width: calc(100% - 140px);
 	}
 }

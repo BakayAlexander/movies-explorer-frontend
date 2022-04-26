@@ -1,6 +1,7 @@
 .techs {
 	background-color: #272727;
 	letter-spacing: -0.04em;
+	overflow-wrap: break-word;
 }
 
 .techs__container {
@@ -18,6 +19,7 @@
 	max-width: calc(100% - 140px);
 	padding-top: 110px;
 	margin: 0 auto;
+	overflow-wrap: break-word;
 }
 
 .techs__text-container {

@@ -3,6 +3,7 @@
 	letter-spacing: -0.04em;
 	max-width: 1280px;
 	margin: 100px auto 125px auto;
+	overflow-wrap: break-word;
 }
 
 .portfolio__title {
