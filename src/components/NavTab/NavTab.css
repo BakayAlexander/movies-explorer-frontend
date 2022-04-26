@@ -3,6 +3,8 @@
 	display: grid;
 	gap: 10px;
 	grid-template-columns: repeat(3, 96px);
+	position: absolute;
+	bottom: 30px;
 }
 
 .navigation__link {
