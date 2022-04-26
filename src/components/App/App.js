@@ -1,5 +1,6 @@
 import { Switch, Route, useHistory } from 'react-router-dom';
 import { data } from '../../utils/data';
+import Login from '../Login/Login';
 import Main from '../Main/Main';
 import Movies from '../Movies/Movies';
 import Profile from '../Profile/Profile';
@@ -26,6 +27,9 @@ function App() {
 				</Route>
 				<Route exact path='/signup'>
 					<Register />
+				</Route>
+				<Route exact path='/signin'>
+					<Login />
 				</Route>
 			</Switch>
 		</div>

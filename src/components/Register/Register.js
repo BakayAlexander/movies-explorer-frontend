@@ -20,7 +20,7 @@ function Register() {
 
 					<label className='register__form-label'>
 						E-mail
-						<input className='register__form-input' id='email-input' type='email' autoComplete='off'></input>
+						<input className='register__form-input' id='email-input' type='email' autoComplete='name'></input>
 						<span className='register__form-error' id='email-input-error'>
 							Что-то пошло не так
 						</span>
@@ -28,7 +28,12 @@ function Register() {
 
 					<label className='register__form-label'>
 						Пароль
-						<input className='register__form-input' id='password-input' type='password' autoComplete='off'></input>
+						<input
+							className='register__form-input'
+							id='password-input'
+							type='password'
+							autoComplete='new-password'
+						></input>
 						<span className='register__form-error' id='password-input-error'>
 							Что-то пошло не так
 						</span>
