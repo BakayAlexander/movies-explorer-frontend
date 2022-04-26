@@ -1,4 +1,5 @@
 import React from 'react';
+import Footer from '../Footer/Footer';
 import Header from '../Header/Header';
 import MoviesCardList from '../MoviesCardList/MoviesCardList';
 import Preloader from '../Preloader/Preloader';
@@ -14,6 +15,7 @@ function SavedMovies(props) {
 				{/* <Preloader /> */}
 				<MoviesCardList films={staticFilms} />
 			</section>
+			<Footer />
 		</>
 	);
 }
