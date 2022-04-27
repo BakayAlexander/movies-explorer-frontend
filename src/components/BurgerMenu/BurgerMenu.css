@@ -34,7 +34,7 @@
 	position: absolute;
 	top: 30px;
 	right: 30px;
-	background: url(../../images/delete-button.svg) center no-repeat;
+	background: url(../../images/close-delete-button.svg) center no-repeat;
 	width: 22px;
 	height: 22px;
 	background-size: contain;

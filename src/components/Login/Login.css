@@ -114,6 +114,12 @@
 	}
 
 	.login__submit-button {
-		margin-top: 157px;
+		margin-top: 260px;
+	}
+}
+
+@media screen and (max-width: 375px) {
+	.login__submit-button {
+		margin-top: 120px;
 	}
 }

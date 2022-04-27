@@ -1,0 +1,64 @@
+.error-modal {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.5);
+	justify-content: center;
+	align-items: center;
+	display: flex;
+	visibility: hidden;
+	opacity: 0;
+	transition: visibility 0.5s, opacity 0.5s ease;
+}
+
+.error-modal_is-opened {
+	visibility: visible;
+	opacity: 1;
+	z-index: 1;
+}
+
+.error-modal__container {
+	background-color: #272727;
+	color: #fff;
+	width: 400px;
+	height: 400px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	border-radius: 10px;
+	box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.15);
+	position: relative;
+}
+
+.error-modal__close-button {
+	position: absolute;
+	top: 30px;
+	right: 30px;
+	background: url(../../images/close-delete-button.svg) center no-repeat;
+	width: 22px;
+	height: 22px;
+	background-size: contain;
+	border: none;
+	cursor: pointer;
+}
+
+.error-modal__status {
+	margin: 0;
+	font-weight: 500;
+	font-size: 40px;
+}
+
+.error-modal__message {
+	margin: 20px 0 0;
+	font-size: 20px;
+}
+
+@media screen and (max-width: 768px) {
+	.error-modal__container {
+		width: 250px;
+		height: 250px;
+	}
+}

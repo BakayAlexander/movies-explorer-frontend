@@ -1,5 +1,7 @@
+import React from 'react';
 import { Switch, Route, useHistory } from 'react-router-dom';
 import { data } from '../../utils/data';
+import ErrorModal from '../ErrorModal/ErrorModal';
 import Login from '../Login/Login';
 import Main from '../Main/Main';
 import Movies from '../Movies/Movies';
@@ -9,6 +11,13 @@ import Register from '../Register/Register';
 import SavedMovies from '../SavedMovies/SavedMovies';
 
 function App() {
+	const [isApiError, setIsApiError] = React.useState(false);
+	const [isLoading, setIsLoading] = React.useState(true);
+
+	function handleCloseModal() {
+		setIsApiError(false);
+	}
+
 	const films = data;
 	return (
 		<div className='page'>
@@ -35,6 +44,7 @@ function App() {
 					<NotFound />
 				</Route>
 			</Switch>
+			<ErrorModal isOpen={isApiError} onClose={handleCloseModal} />
 		</div>
 	);
 }
