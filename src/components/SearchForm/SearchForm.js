@@ -15,12 +15,12 @@ function SearchForm() {
 				<input
 					className='search__form-input'
 					id='movie'
-					placeholder='Фильм'
 					type='text'
 					name='movie'
 					value={movie ?? ''}
 					onChange={handleChangeMovie}
 					required
+					placeholder='Название фильма'
 				/>
 				<button className='search__form-button'></button>
 			</form>

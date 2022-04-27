@@ -65,7 +65,7 @@
 }
 
 .profile__edit-button:hover {
-	opacity: 0.5;
+	opacity: 0.8;
 }
 
 .profile__logout-button {
@@ -79,7 +79,7 @@
 }
 
 .profile__logout-button:hover {
-	opacity: 0.5;
+	opacity: 0.8;
 }
 
 @media screen and (max-width: 768px) {

@@ -13,7 +13,7 @@ function SavedMovies(props) {
 			<section>
 				<SearchForm />
 				{/* <Preloader /> */}
-				<MoviesCardList films={staticFilms} />
+				<MoviesCardList films={staticFilms} isLikeButton={false} isDeleteButton={true} />
 			</section>
 			<Footer />
 		</>

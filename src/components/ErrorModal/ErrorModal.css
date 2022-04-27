@@ -43,6 +43,11 @@
 	background-size: contain;
 	border: none;
 	cursor: pointer;
+	transition: opacity 0.5s ease-in;
+}
+
+.error-modal__close-button:hover {
+	opacity: 0.8;
 }
 
 .error-modal__status {

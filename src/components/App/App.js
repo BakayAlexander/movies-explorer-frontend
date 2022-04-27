@@ -12,11 +12,14 @@ import SavedMovies from '../SavedMovies/SavedMovies';
 
 function App() {
 	const [isApiError, setIsApiError] = React.useState(false);
+	const [isLiked, setIsLiked] = React.useState(true);
 	const [isLoading, setIsLoading] = React.useState(true);
 
 	function handleCloseModal() {
 		setIsApiError(false);
 	}
+
+	function handleCardLike(id, isLiked) {}
 
 	const films = data;
 	return (

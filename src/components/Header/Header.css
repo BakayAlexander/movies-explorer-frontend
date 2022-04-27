@@ -35,7 +35,7 @@
 }
 
 .header__movies-link:hover {
-	opacity: 0.6;
+	opacity: 0.7;
 }
 
 .header__saved-movies-link {
@@ -45,7 +45,7 @@
 	transition: 0.1s ease-in;
 }
 .header__saved-movies-link:hover {
-	opacity: 0.6;
+	opacity: 0.7;
 }
 
 .header__auth-links_main {
@@ -68,7 +68,7 @@
 }
 
 .header__register-link:hover {
-	opacity: 0.6;
+	opacity: 0.7;
 }
 
 .header__login-link {
@@ -84,7 +84,7 @@
 }
 
 .header__login-link:hover {
-	opacity: 0.6;
+	opacity: 0.7;
 }
 
 .header__profile-links_movies {
@@ -98,7 +98,7 @@
 }
 
 .header__profile-links_movies:hover {
-	opacity: 0.6;
+	opacity: 0.7;
 }
 
 .header__profile-link {

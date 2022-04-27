@@ -29,6 +29,10 @@
 	padding-left: 20px;
 }
 
+.search__form-input:focus {
+	outline: 1px solid #4285f4;
+}
+
 .search__form-button {
 	background: url('../../images/search-icon.svg') no-repeat center;
 	background-color: #4285f4;
@@ -38,6 +42,11 @@
 	height: 44px;
 	padding: 7px;
 	cursor: pointer;
+	transition: opacity 0.5s ease-in;
+}
+
+.search__form-button:hover {
+	opacity: 0.8;
 }
 
 .search__decoration-line {

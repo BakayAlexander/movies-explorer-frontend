@@ -12,7 +12,13 @@ function Register() {
 				<form className='register__form'>
 					<label className='register__form-label'>
 						Имя
-						<input className='register__form-input' id='name-input' type='text' autoComplete='name'></input>
+						<input
+							className='register__form-input'
+							id='name-input'
+							type='text'
+							autoComplete='name'
+							placeholder='Введите пожалуйста ваше имя'
+						></input>
 						<span className='register__form-error' id='name-input-error'>
 							Что-то пошло не так
 						</span>
@@ -20,7 +26,13 @@ function Register() {
 
 					<label className='register__form-label'>
 						E-mail
-						<input className='register__form-input' id='email-input' type='email' autoComplete='email'></input>
+						<input
+							className='register__form-input'
+							id='email-input'
+							type='email'
+							autoComplete='email'
+							placeholder='Введите пожалуйста ваш email'
+						></input>
 						<span className='register__form-error' id='email-input-error'>
 							Что-то пошло не так
 						</span>
@@ -33,6 +45,7 @@ function Register() {
 							id='password-input'
 							type='password'
 							autoComplete='new-password'
+							placeholder='Введите пожалуйста ваш пароль'
 						></input>
 						<span className='register__form-error' id='password-input-error'>
 							Что-то пошло не так

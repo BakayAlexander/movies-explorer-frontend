@@ -12,7 +12,13 @@ export default function Login() {
 				<form className='login__form'>
 					<label className='login__form-label'>
 						E-mail
-						<input className='login__form-input' id='email-input' type='email' autoComplete='email'></input>
+						<input
+							className='login__form-input'
+							id='email-input'
+							type='email'
+							autoComplete='email'
+							placeholder='Введите пожалуйста ваш email'
+						></input>
 						<span className='login__form-error' id='email-input-error'>
 							Что-то пошло не так
 						</span>
@@ -25,6 +31,7 @@ export default function Login() {
 							id='password-input'
 							type='password'
 							autoComplete='current-password'
+							placeholder='Введите пожалуйста ваш пароль'
 						></input>
 						<span className='login__form-error' id='password-input-error'>
 							Что-то пошло не так

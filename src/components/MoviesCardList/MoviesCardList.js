@@ -2,12 +2,14 @@ import React from 'react';
 import MoviesCard from '../MoviesCard/MoviesCard';
 import './MoviesCardList.css';
 
-function MoviesCardList({ films, ...props }) {
+function MoviesCardList({ films, isLikeButton, isDeleteButton, ...props }) {
 	return (
 		<div className='movies-list'>
 			<ul className='movies-list__container'>
 				{films.map((film) => (
 					<MoviesCard
+						isLikeButton={isLikeButton}
+						isDeleteButton={isDeleteButton}
 						key={film.id}
 						id={film.id}
 						name={film.nameRU}
