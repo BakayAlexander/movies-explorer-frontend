@@ -2,7 +2,7 @@ import React from 'react';
 import MoviesCard from '../MoviesCard/MoviesCard';
 import './MoviesCardList.css';
 
-function MoviesCardList({ films, isLikeButton, isDeleteButton, ...props }) {
+function MoviesCardList({ films, isLikeButton, isDeleteButton, isMoreButton, ...props }) {
 	return (
 		<div className='movies-list'>
 			<ul className='movies-list__container'>
@@ -20,9 +20,11 @@ function MoviesCardList({ films, isLikeButton, isDeleteButton, ...props }) {
 					/>
 				))}
 			</ul>
-			<button className='movies-list_add-button' type='button' aria-label='Загрузить больше фильмов'>
-				Ещё
-			</button>
+			{isMoreButton && (
+				<button className='movies-list_add-button' type='button' aria-label='Загрузить больше фильмов'>
+					Ещё
+				</button>
+			)}
 		</div>
 	);
 }

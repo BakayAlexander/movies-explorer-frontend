@@ -156,6 +156,6 @@
 	}
 
 	.about-project__scale {
-		max-width: calc(100% - 140px);
+		max-width: calc(100% - 36px);
 	}
 }
