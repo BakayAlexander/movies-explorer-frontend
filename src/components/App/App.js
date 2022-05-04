@@ -11,7 +11,7 @@ import Profile from '../Profile/Profile';
 import Register from '../Register/Register';
 import SavedMovies from '../SavedMovies/SavedMovies';
 import { SHORT_MOVIE_DURATION } from '../../utils/config';
-import { login, register } from '../../utils/Api/Auth';
+import { checkToken, login, register } from '../../utils/Api/Auth';
 
 function App() {
 	const history = useHistory();
@@ -24,6 +24,7 @@ function App() {
 	const [filterValue, setFilterValue] = useState('');
 	const [isShortMoviesChecked, setIsShortMoviesChecked] = useState(false);
 	const [filtredMovies, setFiltredMovies] = useState([]);
+	const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
 
 	function handleRegisterNewUser(name, email, password) {
 		register(name, email, password).then((res) => {
@@ -33,12 +34,22 @@ function App() {
 
 	function handleLoginUser(email, password) {
 		login(email, password).then((res) => {
-			console.log(res);
 			if (res.token) {
+				setIsUserLoggedIn(true);
 				history.push('/movies');
 			}
 		});
 	}
+
+	useEffect(() => {
+		if (localStorage.getItem('jwt')) {
+			const token = localStorage.getItem('jwt');
+			checkToken(token).then((res) => {
+				setIsUserLoggedIn(true);
+				history.push('/movies');
+			});
+		}
+	}, []);
 
 	useEffect(() => {
 		getMovies()
@@ -92,7 +103,7 @@ function App() {
 		<div className='page'>
 			<Switch>
 				<Route exact path='/'>
-					<Main />
+					<Main isUserLoggedIn={isUserLoggedIn} />
 				</Route>
 				<Route exact path='/movies'>
 					<Movies
@@ -106,13 +117,14 @@ function App() {
 						onChangeFilterValue={handleChangeFilterValue}
 						onChangeShortMoviesCheckbox={handleChangeShortMoviesCheckbox}
 						isShortMoviesChecked={isShortMoviesChecked}
+						isUserLoggedIn={isUserLoggedIn}
 					/>
 				</Route>
 				<Route exact path='/saved-movies'>
-					<SavedMovies films={films} />
+					<SavedMovies films={films} isUserLoggedIn={isUserLoggedIn} />
 				</Route>
 				<Route exact path='/profile'>
-					<Profile />
+					<Profile isUserLoggedIn={isUserLoggedIn} />
 				</Route>
 				<Route exact path='/signup'>
 					<Register onRegister={handleRegisterNewUser} />

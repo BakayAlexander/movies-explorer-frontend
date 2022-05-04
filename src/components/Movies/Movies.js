@@ -18,10 +18,11 @@ function Movies({
 	allMovies,
 	onChangeShortMoviesCheckbox,
 	isShortMoviesChecked,
+	isUserLoggedIn,
 }) {
 	return (
 		<>
-			<Header className='movies' />
+			<Header isUserLoggedIn={isUserLoggedIn} />
 			<section>
 				<SearchForm
 					onChangeFilterValue={onChangeFilterValue}

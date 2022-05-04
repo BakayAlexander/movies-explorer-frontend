@@ -5,11 +5,11 @@ import MoviesCardList from '../MoviesCardList/MoviesCardList';
 import Preloader from '../Preloader/Preloader';
 import SearchForm from '../SearchForm/SearchForm';
 
-function SavedMovies(props) {
+function SavedMovies({ isUserLoggedIn, ...props }) {
 	const staticFilms = props.films.slice(12, 15);
 	return (
 		<>
-			<Header className='movies' />
+			<Header isUserLoggedIn={isUserLoggedIn} />
 			<section>
 				<SearchForm />
 				{/* <Preloader /> */}

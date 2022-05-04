@@ -1,22 +1,24 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './Header.css';
 import Logo from '../Logo/Logo';
 import { Link } from 'react-router-dom';
 import BurgerMenu from '../BurgerMenu/BurgerMenu';
 
-function Header(props) {
-	const [isBurgerMenuOpen, setIsBurgerMenuOpen] = React.useState(false);
+function Header({ isUserLoggedIn, ...props }) {
+	const [isBurgerMenuOpen, setIsBurgerMenuOpen] = useState(false);
 
 	function handleToogleBurgerMenu() {
 		setIsBurgerMenuOpen(!isBurgerMenuOpen);
 	}
 
+	const className = isUserLoggedIn ? 'loggedin' : 'loggedout';
+
 	return (
-		<header className={`header ${props.className}`}>
+		<header className={`header ${className}`}>
 			<nav className='header__container'>
 				<Logo />
-				<button className={`header__burger-menu-open-button_${props.className}`} onClick={handleToogleBurgerMenu} />
-				<div className={`header__movies-links_${props.className}`}>
+				<button className={`header__burger-menu-open-button_${className}`} onClick={handleToogleBurgerMenu} />
+				<div className={`header__movies-links_${className}`}>
 					<Link className='header__movies-link' to='/movies'>
 						Фильмы
 					</Link>
@@ -24,7 +26,7 @@ function Header(props) {
 						Сохраненные фильмы
 					</Link>
 				</div>
-				<div className={`header__auth-links_${props.className}`}>
+				<div className={`header__auth-links_${className}`}>
 					<Link className='header__register-link' to='/signup'>
 						Регистрация
 					</Link>
@@ -32,7 +34,7 @@ function Header(props) {
 						Войти
 					</Link>
 				</div>
-				<div className={`header__profile-links_${props.className}`}>
+				<div className={`header__profile-links_${className}`}>
 					<Link className='header__profile-link' to='/profile'>
 						Аккаунт
 					</Link>

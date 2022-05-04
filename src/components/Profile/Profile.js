@@ -2,10 +2,11 @@ import React from 'react';
 import './Profile.css';
 import Header from '../Header/Header';
 
-function Profile() {
+function Profile({ isUserLoggedIn }) {
+	console.log(isUserLoggedIn);
 	return (
 		<>
-			<Header className='movies' />
+			<Header isUserLoggedIn={isUserLoggedIn} />
 			<section className='profile'>
 				<h2 className='profile__title'>Привет, Александр!</h2>
 				<div className='profile__text-container'>
