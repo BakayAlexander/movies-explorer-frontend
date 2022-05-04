@@ -4,18 +4,28 @@ import SearchForm from '../SearchForm/SearchForm';
 import MoviesCardList from '../MoviesCardList/MoviesCardList';
 import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
+import ErrorModal from '../ErrorModal/ErrorModal';
+import './Movies.css';
 
-function Movies(props) {
-	const staticFilms = props.films.slice(0, 12);
+function Movies({ films, isLoading, isApiError, isErrorModalOpen, errorData, onCloseModal, onChangeFilterValue }) {
 	return (
 		<>
 			<Header className='movies' />
 			<section>
-				<SearchForm />
-				{/* <Preloader /> */}
-				<MoviesCardList films={staticFilms} isMoreButton={true} isLikeButton={true} isDeleteButton={false} />
+				<SearchForm onChangeFilterValue={onChangeFilterValue} />
+				{isLoading ? (
+					<Preloader />
+				) : !isApiError ? (
+					<MoviesCardList films={films} isMoreButton={true} isLikeButton={true} isDeleteButton={false} />
+				) : (
+					<h2 className='movies__api-error'>
+						Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного
+						и попробуйте ещё раз.
+					</h2>
+				)}
 			</section>
 			<Footer />
+			<ErrorModal isOpen={isErrorModalOpen} onClose={onCloseModal} errorData={errorData} />
 		</>
 	);
 }

@@ -14,18 +14,53 @@ import SavedMovies from '../SavedMovies/SavedMovies';
 function App() {
 	const [allMovies, setAllMovies] = useState([]);
 	const [isApiError, setIsApiError] = useState(false);
+	const [errorData, setErrorData] = useState('');
+	const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
 	const [isLiked, setIsLiked] = useState(true);
 	const [isLoading, setIsLoading] = useState(true);
-
-	function handleCloseModal() {
-		setIsApiError(false);
-	}
+	const [filterValue, setFilterValue] = useState('');
+	const [filtredMovies, setFiltredMovies] = useState([]);
 
 	useEffect(() => {
-		getMovies().then((movies) => {
-			console.log(movies);
-		});
-	}, []);
+		getMovies()
+			.then((movies) => {
+				setAllMovies(movies);
+				setIsLoading(false);
+				setIsApiError(false);
+				if (filterValue) {
+					const result = movies.filter((movie) => {
+						return movie.nameRU.toLowerCase().includes(filterValue.toLowerCase());
+					});
+					setFiltredMovies(result);
+				}
+			})
+			.catch((err) => {
+				setIsApiError(true);
+				setErrorData(err);
+				setIsErrorModalOpen(true);
+			})
+			.finally(() => {
+				setIsLoading(false);
+			});
+	}, [filterValue]);
+
+	function handleCloseModal() {
+		setIsErrorModalOpen(false);
+	}
+
+	function handleChangeFilterValue(searchInputValue) {
+		setFilterValue(searchInputValue);
+	}
+	// console.log(allMovies);
+	// useEffect(
+	// 	(allMovies) => {
+	// 		let filtredArrayOfMovies = allMovies.filter((movie, index, array) => {
+	// 			movie.nameRU.includes(filterValue);
+	// 		});
+	// 		console.log(filtredArrayOfMovies);
+	// 	},
+	// 	[filterValue]
+	// );
 
 	function handleCardLike(id, isLiked) {}
 
@@ -37,7 +72,16 @@ function App() {
 					<Main />
 				</Route>
 				<Route exact path='/movies'>
-					<Movies films={films} />
+					<Movies
+						// films={allMovies}
+						films={filtredMovies}
+						isLoading={isLoading}
+						isApiError={isApiError}
+						isErrorModalOpen={isErrorModalOpen}
+						errorData={errorData}
+						onCloseModal={handleCloseModal}
+						onChangeFilterValue={handleChangeFilterValue}
+					/>
 				</Route>
 				<Route exact path='/saved-movies'>
 					<SavedMovies films={films} />
@@ -55,7 +99,6 @@ function App() {
 					<NotFound />
 				</Route>
 			</Switch>
-			<ErrorModal isOpen={isApiError} onClose={handleCloseModal} />
 		</div>
 	);
 }

@@ -1,7 +1,13 @@
 import React from 'react';
 import './ErrorModal.css';
 
-function ErrorModal({ isOpen, onClose, ...props }) {
+function ErrorModal({ isOpen, onClose, errorData }) {
+	let errorName = '';
+
+	if (errorData === 404) {
+		errorName = 'Страница не найдена.';
+	}
+
 	React.useEffect(() => {
 		if (!isOpen) return;
 		function closeByEscape(e) {
@@ -23,8 +29,8 @@ function ErrorModal({ isOpen, onClose, ...props }) {
 		<div className={`error-modal ${isOpen ? 'error-modal_is-opened' : ''}`} onClick={handleOverlay}>
 			<div className='error-modal__container'>
 				<button className='error-modal__close-button' onClick={onClose} />
-				<h1 className='error-modal__status'>409</h1>
-				<p className='error-modal__message'>Что-то пошло не так</p>
+				<h1 className='error-modal__status'>{errorData}</h1>
+				<p className='error-modal__message'> {errorName ? errorName : 'Что-то пошло не так.'}</p>
 			</div>
 		</div>
 	);

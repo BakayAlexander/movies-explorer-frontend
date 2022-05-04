@@ -1,7 +1,7 @@
 import React from 'react';
 import './MoviesCard.css';
 
-function MoviesCard({ id, name, duration, image, alt, isLikeButton, isDeleteButton, ...props }) {
+function MoviesCard({ id, name, duration, image, alt, isLikeButton, isDeleteButton }) {
 	// const [isLiked, setIsLiked] = React.useState(false);
 
 	function showDeleteIcon(e) {
@@ -26,7 +26,7 @@ function MoviesCard({ id, name, duration, image, alt, isLikeButton, isDeleteButt
 
 	return (
 		<li className='movies-card' onMouseEnter={showDeleteIcon} onMouseLeave={hideDeleteIcon}>
-			<img className='movies-card__image' src='https://artfiles.alphacoders.com/357/35757.jpg' alt={alt} />
+			<img className='movies-card__image' src={`https://api.nomoreparties.co${image}`} alt={alt} />
 			<div className='movies-card__description'>
 				<div className='movies-card__text-container'>
 					<h3 className='movies-card__title'>{name}</h3>
