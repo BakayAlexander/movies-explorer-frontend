@@ -7,16 +7,37 @@ import Footer from '../Footer/Footer';
 import ErrorModal from '../ErrorModal/ErrorModal';
 import './Movies.css';
 
-function Movies({ films, isLoading, isApiError, isErrorModalOpen, errorData, onCloseModal, onChangeFilterValue }) {
+function Movies({
+	films,
+	isLoading,
+	isApiError,
+	isErrorModalOpen,
+	errorData,
+	onCloseModal,
+	onChangeFilterValue,
+	allMovies,
+	onChangeShortMoviesCheckbox,
+	isShortMoviesChecked,
+}) {
 	return (
 		<>
 			<Header className='movies' />
 			<section>
-				<SearchForm onChangeFilterValue={onChangeFilterValue} />
+				<SearchForm
+					onChangeFilterValue={onChangeFilterValue}
+					onChangeShortMoviesCheckbox={onChangeShortMoviesCheckbox}
+					isShortMoviesChecked={isShortMoviesChecked}
+				/>
 				{isLoading ? (
 					<Preloader />
 				) : !isApiError ? (
-					<MoviesCardList films={films} isMoreButton={true} isLikeButton={true} isDeleteButton={false} />
+					<MoviesCardList
+						films={films}
+						isMoreButton={true}
+						isLikeButton={true}
+						isDeleteButton={false}
+						allMovies={allMovies}
+					/>
 				) : (
 					<h2 className='movies__api-error'>
 						Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного

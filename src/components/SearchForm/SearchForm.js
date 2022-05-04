@@ -2,7 +2,7 @@ import React from 'react';
 import FilterCheckbox from '../FilterCheckbox/FilterCheckbox';
 import './SearchForm.css';
 
-function SearchForm({ onChangeFilterValue }) {
+function SearchForm({ onChangeFilterValue, onChangeShortMoviesCheckbox, isShortMoviesChecked }) {
 	const [movie, setMovie] = React.useState('');
 
 	function handleChangeMovie(e) {
@@ -29,7 +29,10 @@ function SearchForm({ onChangeFilterValue }) {
 				/>
 				<button className='search__form-button'></button>
 			</form>
-			<FilterCheckbox />
+			<FilterCheckbox
+				onChangeShortMoviesCheckbox={onChangeShortMoviesCheckbox}
+				isShortMoviesChecked={isShortMoviesChecked}
+			/>
 			<hr className='search__decoration-line' />
 		</section>
 	);

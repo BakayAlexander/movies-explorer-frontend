@@ -2,9 +2,10 @@ import React, { useEffect, useState } from 'react';
 import MoviesCard from '../MoviesCard/MoviesCard';
 import './MoviesCardList.css';
 
-function MoviesCardList({ films, isLikeButton, isDeleteButton, isMoreButton }) {
+function MoviesCardList({ films, isLikeButton, isDeleteButton, isMoreButton, allMovies }) {
 	const [moviesNumber, setMoviesNumber] = useState(3);
 	const [counterAddMovies, setCounterAddMovies] = useState(0);
+	const [renderedFilms, setRenderedFilms] = useState(films);
 
 	const display = window.screen.width;
 
@@ -33,8 +34,6 @@ function MoviesCardList({ films, isLikeButton, isDeleteButton, isMoreButton }) {
 		setMoviesNumber(moviesNumber + counterAddMovies);
 	}
 
-	console.log(films);
-
 	return (
 		<div className='movies-list'>
 			{films.length ? (
@@ -56,7 +55,7 @@ function MoviesCardList({ films, isLikeButton, isDeleteButton, isMoreButton }) {
 				<p className='movies-list__no-films-searched'>Мы ничего не нашли по вашему запросу.</p>
 			)}
 
-			{isMoreButton && films.length >= moviesNumber && (
+			{isMoreButton && films.length > moviesNumber && (
 				<button
 					className='movies-list_add-button'
 					type='button'

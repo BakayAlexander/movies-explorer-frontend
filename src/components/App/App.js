@@ -10,6 +10,7 @@ import NotFound from '../NotFound/NotFound';
 import Profile from '../Profile/Profile';
 import Register from '../Register/Register';
 import SavedMovies from '../SavedMovies/SavedMovies';
+import { SHORT_MOVIE_DURATION } from '../../utils/config';
 
 function App() {
 	const [allMovies, setAllMovies] = useState([]);
@@ -19,6 +20,7 @@ function App() {
 	const [isLiked, setIsLiked] = useState(true);
 	const [isLoading, setIsLoading] = useState(true);
 	const [filterValue, setFilterValue] = useState('');
+	const [isShortMoviesChecked, setIsShortMoviesChecked] = useState(false);
 	const [filtredMovies, setFiltredMovies] = useState([]);
 
 	useEffect(() => {
@@ -29,9 +31,12 @@ function App() {
 				setIsApiError(false);
 				if (filterValue) {
 					const result = movies.filter((movie) => {
-						return movie.nameRU.toLowerCase().includes(filterValue.toLowerCase());
+						return movie.nameRU.toLowerCase().includes(filterValue.toLowerCase().trim());
 					});
-					setFiltredMovies(result);
+					if (isShortMoviesChecked) {
+						return setFiltredMovies(filterShortMovies(result));
+					}
+					return setFiltredMovies(result);
 				}
 			})
 			.catch((err) => {
@@ -51,16 +56,17 @@ function App() {
 	function handleChangeFilterValue(searchInputValue) {
 		setFilterValue(searchInputValue);
 	}
-	// console.log(allMovies);
-	// useEffect(
-	// 	(allMovies) => {
-	// 		let filtredArrayOfMovies = allMovies.filter((movie, index, array) => {
-	// 			movie.nameRU.includes(filterValue);
-	// 		});
-	// 		console.log(filtredArrayOfMovies);
-	// 	},
-	// 	[filterValue]
-	// );
+	function handleChangeShortMoviesCheckbox() {
+		setIsShortMoviesChecked(!isShortMoviesChecked);
+	}
+
+	function filterShortMovies(arr) {
+		if (arr.length !== 0 || arr !== 'undefined') {
+			return arr.filter((movie) => {
+				return movie.duration <= SHORT_MOVIE_DURATION;
+			});
+		}
+	}
 
 	function handleCardLike(id, isLiked) {}
 
@@ -81,6 +87,8 @@ function App() {
 						errorData={errorData}
 						onCloseModal={handleCloseModal}
 						onChangeFilterValue={handleChangeFilterValue}
+						onChangeShortMoviesCheckbox={handleChangeShortMoviesCheckbox}
+						isShortMoviesChecked={isShortMoviesChecked}
 					/>
 				</Route>
 				<Route exact path='/saved-movies'>
