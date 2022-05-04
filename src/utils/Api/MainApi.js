@@ -1,3 +1,22 @@
+import { BASE_URL } from '../config';
+
+const prepareDate = (res) => {
+	if (res.ok) {
+		return res.json();
+	}
+	return Promise.reject(res.status);
+};
+
+// export const getUserData = (token) => {
+// 	return fetch(`${BASE_URL}/users/me`, {
+// 		method: 'GET',
+// 		headers: {
+// 			'Content-Type': 'application/json',
+// 			Authorization: `Bearer ${token}`,
+// 		},
+// 	}).then(prepareDate);
+// };
+
 // export class Api {
 // 	constructor(config) {
 // 		this._url = config.url;

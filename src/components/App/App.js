@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Switch, Route, useHistory } from 'react-router-dom';
+import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import { data } from '../../utils/data';
 import { getMovies } from '../../utils/Api/MoviesApi';
 import ErrorModal from '../ErrorModal/ErrorModal';
@@ -15,6 +16,7 @@ import { checkToken, login, register } from '../../utils/Api/Auth';
 
 function App() {
 	const history = useHistory();
+	const [currentUser, setCurrentUser] = useState({});
 	const [allMovies, setAllMovies] = useState([]);
 	const [isApiError, setIsApiError] = useState(false);
 	const [errorData, setErrorData] = useState('');
@@ -45,6 +47,7 @@ function App() {
 		if (localStorage.getItem('jwt')) {
 			const token = localStorage.getItem('jwt');
 			checkToken(token).then((res) => {
+				setCurrentUser(res);
 				setIsUserLoggedIn(true);
 				history.push('/movies');
 			});
@@ -55,6 +58,7 @@ function App() {
 		getMovies()
 			.then((movies) => {
 				setAllMovies(movies);
+
 				setIsLoading(false);
 				setIsApiError(false);
 				if (filterValue) {
@@ -101,41 +105,43 @@ function App() {
 	const films = data;
 	return (
 		<div className='page'>
-			<Switch>
-				<Route exact path='/'>
-					<Main isUserLoggedIn={isUserLoggedIn} />
-				</Route>
-				<Route exact path='/movies'>
-					<Movies
-						// films={allMovies}
-						films={filtredMovies}
-						isLoading={isLoading}
-						isApiError={isApiError}
-						isErrorModalOpen={isErrorModalOpen}
-						errorData={errorData}
-						onCloseModal={handleCloseModal}
-						onChangeFilterValue={handleChangeFilterValue}
-						onChangeShortMoviesCheckbox={handleChangeShortMoviesCheckbox}
-						isShortMoviesChecked={isShortMoviesChecked}
-						isUserLoggedIn={isUserLoggedIn}
-					/>
-				</Route>
-				<Route exact path='/saved-movies'>
-					<SavedMovies films={films} isUserLoggedIn={isUserLoggedIn} />
-				</Route>
-				<Route exact path='/profile'>
-					<Profile isUserLoggedIn={isUserLoggedIn} />
-				</Route>
-				<Route exact path='/signup'>
-					<Register onRegister={handleRegisterNewUser} />
-				</Route>
-				<Route exact path='/signin'>
-					<Login onLogin={handleLoginUser} />
-				</Route>
-				<Route exact path='*'>
-					<NotFound />
-				</Route>
-			</Switch>
+			<CurrentUserContext.Provider value={currentUser}>
+				<Switch>
+					<Route exact path='/'>
+						<Main isUserLoggedIn={isUserLoggedIn} />
+					</Route>
+					<Route exact path='/movies'>
+						<Movies
+							// films={allMovies}
+							films={filtredMovies}
+							isLoading={isLoading}
+							isApiError={isApiError}
+							isErrorModalOpen={isErrorModalOpen}
+							errorData={errorData}
+							onCloseModal={handleCloseModal}
+							onChangeFilterValue={handleChangeFilterValue}
+							onChangeShortMoviesCheckbox={handleChangeShortMoviesCheckbox}
+							isShortMoviesChecked={isShortMoviesChecked}
+							isUserLoggedIn={isUserLoggedIn}
+						/>
+					</Route>
+					<Route exact path='/saved-movies'>
+						<SavedMovies films={films} isUserLoggedIn={isUserLoggedIn} />
+					</Route>
+					<Route exact path='/profile'>
+						<Profile isUserLoggedIn={isUserLoggedIn} />
+					</Route>
+					<Route exact path='/signup'>
+						<Register onRegister={handleRegisterNewUser} />
+					</Route>
+					<Route exact path='/signin'>
+						<Login onLogin={handleLoginUser} />
+					</Route>
+					<Route exact path='*'>
+						<NotFound />
+					</Route>
+				</Switch>
+			</CurrentUserContext.Provider>
 		</div>
 	);
 }
