@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Switch, Route, useHistory } from 'react-router-dom';
 import { data } from '../../utils/data';
+import { getMovies } from '../../utils/Api/MoviesApi';
 import ErrorModal from '../ErrorModal/ErrorModal';
 import Login from '../Login/Login';
 import Main from '../Main/Main';
@@ -11,13 +12,20 @@ import Register from '../Register/Register';
 import SavedMovies from '../SavedMovies/SavedMovies';
 
 function App() {
-	const [isApiError, setIsApiError] = React.useState(false);
-	const [isLiked, setIsLiked] = React.useState(true);
-	const [isLoading, setIsLoading] = React.useState(true);
+	const [allMovies, setAllMovies] = useState([]);
+	const [isApiError, setIsApiError] = useState(false);
+	const [isLiked, setIsLiked] = useState(true);
+	const [isLoading, setIsLoading] = useState(true);
 
 	function handleCloseModal() {
 		setIsApiError(false);
 	}
+
+	useEffect(() => {
+		getMovies().then((movies) => {
+			console.log(movies);
+		});
+	}, []);
 
 	function handleCardLike(id, isLiked) {}
 
