@@ -1,0 +1,19 @@
+.page {
+	background-color: rgba(32, 32, 32, 1);
+	font-family: 'Inter', Arial, sans-serif;
+	color: #fff;
+	-moz-osx-font-smoothing: grayscale;
+	-webkit-font-smoothing: antialiased;
+	min-width: 320px;
+	margin: 0 auto;
+}
+
+/* @media screen and (max-width: 820px) {
+	.page {
+		height: 100vh;
+		position: relative;
+	}
+} */
+
+@import url('../src/vendor/normalize.css');
+@import url('../src/vendor/fonts/fonts.css');

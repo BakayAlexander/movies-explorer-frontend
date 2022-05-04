@@ -1,0 +1,130 @@
+.techs {
+	background-color: #272727;
+	letter-spacing: -0.04em;
+	overflow-wrap: break-word;
+}
+
+.techs__container {
+	max-width: 1280px;
+	margin: 0 auto;
+}
+
+.techs__title {
+	color: white;
+	font-size: 22px;
+	font-weight: 400;
+	line-height: 26px;
+	border-bottom: 1px solid rgb(255, 255, 255);
+	padding-bottom: 23px;
+	max-width: calc(100% - 140px);
+	padding-top: 110px;
+	margin: 0 auto;
+	overflow-wrap: break-word;
+}
+
+.techs__text-container {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
+.techs__text-element {
+	align-self: center;
+	margin-top: 90px;
+	max-width: 460px;
+}
+
+.techs__text-title {
+	margin: 0;
+	font-size: 50px;
+	line-height: 58px;
+	text-align: center;
+	font-weight: 400;
+}
+
+.techs__text-subtitle {
+	margin: 26px 0 0;
+	font-size: 14px;
+	line-height: 20px;
+	text-align: center;
+	font-weight: 400;
+}
+
+.techs__labels {
+	margin: 100px 0;
+	list-style: none;
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(84px, 90px));
+	grid-gap: 10px;
+	padding: 0;
+	justify-content: center;
+}
+
+.techs__label {
+	background-color: #303030;
+	color: white;
+	padding: 21px 0;
+	text-decoration: none;
+	border-radius: 10px;
+	font-size: 12px;
+	font-weight: 400;
+	line-height: 16px;
+	transition: 0.1s ease-in;
+	text-align: center;
+	font-size: 14px;
+	line-height: 17px;
+}
+
+@media screen and (max-width: 768px) {
+	.techs__label {
+		font-size: 12px;
+		line-height: 14.5px;
+	}
+
+	.techs__title {
+		max-width: calc(100% - 90px);
+		padding-top: 90px;
+		margin: 0 auto;
+	}
+
+	.techs__labels {
+		margin: 83px 0 90px 0;
+	}
+}
+
+@media screen and (max-width: 600px) {
+	.techs {
+		background-color: inherit;
+	}
+	.techs__title {
+		max-width: calc(100% - 20px);
+		padding-top: 70px;
+		margin: 0 auto;
+	}
+
+	.techs__text-element {
+		margin-top: 60px;
+		max-width: 350px;
+	}
+
+	.techs__text-title {
+		font-size: 30px;
+		line-height: 36px;
+	}
+
+	.techs__text-subtitle {
+		font-size: 11px;
+		line-height: 16px;
+	}
+
+	.techs__labels {
+		margin: 50px auto 70px auto;
+		max-width: 250px;
+	}
+}
+
+@media screen and (max-width: 375px) {
+	.techs__text-element {
+		max-width: 292px;
+	}
+}
