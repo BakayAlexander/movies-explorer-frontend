@@ -1,15 +1,36 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Logo from '../Logo/Logo';
 import './Register.css';
 
-function Register() {
+function Register({ onRegister }) {
+	const [name, setName] = useState('');
+	const [email, setEmail] = useState('');
+	const [password, setPassword] = useState('');
+
+	function handleChangeName(e) {
+		setName(e.target.value);
+	}
+
+	function handleChangeEmail(e) {
+		setEmail(e.target.value);
+	}
+
+	function handleChangePassword(e) {
+		setPassword(e.target.value);
+	}
+
+	function handleSubmitRegister(e) {
+		e.preventDefault();
+		onRegister(name, email, password);
+	}
+
 	return (
 		<section className='register'>
 			<div className='register__container'>
 				<Logo />
 				<h2 className='register__title'>Добро пожаловать!</h2>
-				<form className='register__form'>
+				<form className='register__form' onSubmit={handleSubmitRegister}>
 					<label className='register__form-label'>
 						Имя
 						<input
@@ -18,6 +39,8 @@ function Register() {
 							type='text'
 							autoComplete='name'
 							placeholder='Введите пожалуйста ваше имя'
+							value={name ?? ''}
+							onChange={handleChangeName}
 						></input>
 						<span className='register__form-error' id='name-input-error'>
 							Что-то пошло не так
@@ -32,6 +55,8 @@ function Register() {
 							type='email'
 							autoComplete='email'
 							placeholder='Введите пожалуйста ваш email'
+							value={email ?? ''}
+							onChange={handleChangeEmail}
 						></input>
 						<span className='register__form-error' id='email-input-error'>
 							Что-то пошло не так
@@ -46,6 +71,8 @@ function Register() {
 							type='password'
 							autoComplete='new-password'
 							placeholder='Введите пожалуйста ваш пароль'
+							value={password ?? ''}
+							onChange={handleChangePassword}
 						></input>
 						<span className='register__form-error' id='password-input-error'>
 							Что-то пошло не так

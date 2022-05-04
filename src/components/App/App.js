@@ -11,8 +11,10 @@ import Profile from '../Profile/Profile';
 import Register from '../Register/Register';
 import SavedMovies from '../SavedMovies/SavedMovies';
 import { SHORT_MOVIE_DURATION } from '../../utils/config';
+import { login, register } from '../../utils/Api/Auth';
 
 function App() {
+	const history = useHistory();
 	const [allMovies, setAllMovies] = useState([]);
 	const [isApiError, setIsApiError] = useState(false);
 	const [errorData, setErrorData] = useState('');
@@ -22,6 +24,21 @@ function App() {
 	const [filterValue, setFilterValue] = useState('');
 	const [isShortMoviesChecked, setIsShortMoviesChecked] = useState(false);
 	const [filtredMovies, setFiltredMovies] = useState([]);
+
+	function handleRegisterNewUser(name, email, password) {
+		register(name, email, password).then((res) => {
+			history.push('/signin');
+		});
+	}
+
+	function handleLoginUser(email, password) {
+		login(email, password).then((res) => {
+			console.log(res);
+			if (res.token) {
+				history.push('/movies');
+			}
+		});
+	}
 
 	useEffect(() => {
 		getMovies()
@@ -98,10 +115,10 @@ function App() {
 					<Profile />
 				</Route>
 				<Route exact path='/signup'>
-					<Register />
+					<Register onRegister={handleRegisterNewUser} />
 				</Route>
 				<Route exact path='/signin'>
-					<Login />
+					<Login onLogin={handleLoginUser} />
 				</Route>
 				<Route exact path='*'>
 					<NotFound />
