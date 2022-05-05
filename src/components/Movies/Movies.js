@@ -19,7 +19,9 @@ function Movies({
 	onChangeShortMoviesCheckbox,
 	isShortMoviesChecked,
 	isUserLoggedIn,
+	handleSaveLikedMovie,
 }) {
+	console.log(films);
 	return (
 		<>
 			<Header isUserLoggedIn={isUserLoggedIn} />
@@ -38,6 +40,7 @@ function Movies({
 						isLikeButton={true}
 						isDeleteButton={false}
 						allMovies={allMovies}
+						handleSaveLikedMovie={handleSaveLikedMovie}
 					/>
 				) : (
 					<h2 className='movies__api-error'>

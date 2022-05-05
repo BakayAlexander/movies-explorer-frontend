@@ -13,7 +13,7 @@ import Register from '../Register/Register';
 import SavedMovies from '../SavedMovies/SavedMovies';
 import { SHORT_MOVIE_DURATION } from '../../utils/config';
 import { checkToken, login, register } from '../../utils/Api/Auth';
-import { updateUserProfile } from '../../utils/Api/MainApi';
+import { deleteLikedMovieApi, getLikedMovies, saveLikedMovieApi, updateUserProfile } from '../../utils/Api/MainApi';
 
 function App() {
 	const history = useHistory();
@@ -22,7 +22,8 @@ function App() {
 	const [isApiError, setIsApiError] = useState(false);
 	const [errorData, setErrorData] = useState('');
 	const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
-	const [isLiked, setIsLiked] = useState(true);
+	const [isLiked, setIsLiked] = useState(false);
+	const [likedMovies, setLikedMovies] = useState([]);
 	const [isLoading, setIsLoading] = useState(true);
 	const [filterValue, setFilterValue] = useState('');
 	const [isShortMoviesChecked, setIsShortMoviesChecked] = useState(false);
@@ -86,8 +87,11 @@ function App() {
 						return movie.nameRU.toLowerCase().includes(filterValue.toLowerCase().trim());
 					});
 					if (isShortMoviesChecked) {
+						console.log(filterShortMovies(result));
+						// localStorage.setItem('findedMovies', JSON.stringify('shot movie'));
 						return setFiltredMovies(filterShortMovies(result));
 					}
+					// localStorage.setItem('findedMovies', JSON.stringify(result));
 					return setFiltredMovies(result);
 				}
 			})
@@ -99,7 +103,16 @@ function App() {
 			.finally(() => {
 				setIsLoading(false);
 			});
-	}, [filterValue]);
+	}, [filterValue, isShortMoviesChecked]);
+
+	// const testMovies = localStorage.getItem('findedMovies');
+	// console.log(testMovies);
+
+	useEffect(() => {
+		getLikedMovies().then((res) => setLikedMovies(res));
+	}, [isLiked]);
+
+	console.log(likedMovies);
 
 	function handleCloseModal() {
 		setIsErrorModalOpen(false);
@@ -137,9 +150,44 @@ function App() {
 			});
 	}
 
-	function handleCardLike(id, isLiked) {}
+	function handleSaveLikedMovie(
+		country,
+		director,
+		duration,
+		year,
+		description,
+		image,
+		trailerLink,
+		thumbnail,
+		id,
+		nameRU,
+		nameEN
+	) {
+		saveLikedMovieApi(
+			country,
+			director,
+			duration,
+			year,
+			description,
+			image,
+			trailerLink,
+			thumbnail,
+			id,
+			nameRU,
+			nameEN
+		).then(() => {
+			setIsLiked(true);
+		});
+	}
 
-	const films = data;
+	function deleteLikedMovie(id) {
+		deleteLikedMovieApi(id);
+	}
+
+	// useEffect(() => {
+	// 	deleteLikedMovie(17);
+	// }, []);
+
 	return (
 		<div className='page'>
 			<CurrentUserContext.Provider value={currentUser}>
@@ -160,10 +208,11 @@ function App() {
 							onChangeShortMoviesCheckbox={handleChangeShortMoviesCheckbox}
 							isShortMoviesChecked={isShortMoviesChecked}
 							isUserLoggedIn={isUserLoggedIn}
+							handleSaveLikedMovie={handleSaveLikedMovie}
 						/>
 					</Route>
 					<Route exact path='/saved-movies'>
-						<SavedMovies films={films} isUserLoggedIn={isUserLoggedIn} />
+						<SavedMovies films={likedMovies} isUserLoggedIn={isUserLoggedIn} onDeleteMovie={deleteLikedMovie} />
 					</Route>
 					<Route exact path='/profile'>
 						<Profile

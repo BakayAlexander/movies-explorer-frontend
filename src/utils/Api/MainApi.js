@@ -20,6 +20,53 @@ export const updateUserProfile = (email, name) => {
 		body: JSON.stringify({ name: name, email: email }),
 	}).then(prepareDate);
 };
+
+export const getLikedMovies = () => {
+	return fetch(`${BASE_URL}/movies`, {
+		method: 'GET',
+		headers: headers,
+	}).then(prepareDate);
+};
+
+export const saveLikedMovieApi = (
+	country,
+	director,
+	duration,
+	year,
+	description,
+	image,
+	trailerLink,
+	thumbnail,
+	movieId,
+	nameRU,
+	nameEN
+) => {
+	return fetch(`${BASE_URL}/movies`, {
+		method: 'POST',
+		headers: headers,
+		body: JSON.stringify({
+			country,
+			director,
+			duration,
+			year,
+			description,
+			image,
+			trailerLink,
+			thumbnail,
+			movieId,
+			nameRU,
+			nameEN,
+		}),
+	}).then(prepareDate);
+};
+
+export const deleteLikedMovieApi = (id) => {
+	return fetch(`${BASE_URL}/movies/${id}`, {
+		method: 'DELETE',
+		headers: headers,
+	}).then(prepareDate);
+};
+
 // export const getUserData = (token) => {
 // 	return fetch(`${BASE_URL}/users/me`, {
 // 		method: 'GET',

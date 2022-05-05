@@ -5,15 +5,20 @@ import MoviesCardList from '../MoviesCardList/MoviesCardList';
 import Preloader from '../Preloader/Preloader';
 import SearchForm from '../SearchForm/SearchForm';
 
-function SavedMovies({ isUserLoggedIn, ...props }) {
-	const staticFilms = props.films.slice(12, 15);
+function SavedMovies({ films, isUserLoggedIn, onDeleteMovie }) {
 	return (
 		<>
 			<Header isUserLoggedIn={isUserLoggedIn} />
 			<section>
 				<SearchForm />
 				{/* <Preloader /> */}
-				<MoviesCardList films={staticFilms} isMoreButton={false} isLikeButton={false} isDeleteButton={true} />
+				<MoviesCardList
+					films={films}
+					isMoreButton={false}
+					isLikeButton={false}
+					isDeleteButton={true}
+					onDeleteMovie={onDeleteMovie}
+				/>
 			</section>
 			<Footer />
 		</>

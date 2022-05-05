@@ -1,9 +1,27 @@
 import React from 'react';
 import './MoviesCard.css';
 
-function MoviesCard({ id, name, duration, image, alt, trailerLink, isLikeButton, isDeleteButton }) {
+function MoviesCard({
+	id,
+	name,
+	duration,
+	image,
+	alt,
+	trailerLink,
+	country,
+	director,
+	year,
+	description,
+	thumbnail,
+	nameEN,
+	isLikeButton,
+	isDeleteButton,
+	handleSaveLikedMovie,
+	onDeleteMovie,
+	film,
+}) {
+	console.log(film);
 	// const [isLiked, setIsLiked] = React.useState(false);
-
 	function showDeleteIcon(e) {
 		if (!isDeleteButton) return;
 		const card = e.currentTarget;
@@ -21,12 +39,29 @@ function MoviesCard({ id, name, duration, image, alt, trailerLink, isLikeButton,
 	function handleLikeClick(e) {
 		if (!isLikeButton) return;
 		const button = e.currentTarget;
+		handleSaveLikedMovie(
+			country,
+			director,
+			duration,
+			year,
+			description,
+			image,
+			trailerLink,
+			thumbnail,
+			id,
+			name,
+			nameEN
+		);
 		button.classList.toggle('movies-card__like-button_active');
+	}
+
+	function hadleClickDeleteButton() {
+		onDeleteMovie(film._id);
 	}
 
 	return (
 		<li className='movies-card' onMouseEnter={showDeleteIcon} onMouseLeave={hideDeleteIcon}>
-			<img className='movies-card__image' src={`https://api.nomoreparties.co${image}`} alt={alt} />
+			<img className='movies-card__image' src={image} alt={alt} />
 			<div className='movies-card__description'>
 				<div className='movies-card__text-container'>
 					<h3 className='movies-card__title'>{name}</h3>
@@ -42,6 +77,7 @@ function MoviesCard({ id, name, duration, image, alt, trailerLink, isLikeButton,
 					className={` ${isDeleteButton ? 'movies-card__delete-button' : 'movies-card__delete-button_disable'}`}
 					type='button'
 					aria-label='Удалить карточку'
+					onClick={hadleClickDeleteButton}
 				></button>
 			</div>
 		</li>

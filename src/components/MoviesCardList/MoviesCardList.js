@@ -2,10 +2,17 @@ import React, { useEffect, useState } from 'react';
 import MoviesCard from '../MoviesCard/MoviesCard';
 import './MoviesCardList.css';
 
-function MoviesCardList({ films, isLikeButton, isDeleteButton, isMoreButton, allMovies }) {
+function MoviesCardList({
+	films,
+	isLikeButton,
+	isDeleteButton,
+	isMoreButton,
+	allMovies,
+	handleSaveLikedMovie,
+	onDeleteMovie,
+}) {
 	const [moviesNumber, setMoviesNumber] = useState(3);
 	const [counterAddMovies, setCounterAddMovies] = useState(0);
-	const [renderedFilms, setRenderedFilms] = useState(films);
 
 	const display = window.screen.width;
 
@@ -34,6 +41,7 @@ function MoviesCardList({ films, isLikeButton, isDeleteButton, isMoreButton, all
 		setMoviesNumber(moviesNumber + counterAddMovies);
 	}
 
+	console.log(films);
 	return (
 		<div className='movies-list'>
 			{films.length ? (
@@ -42,13 +50,22 @@ function MoviesCardList({ films, isLikeButton, isDeleteButton, isMoreButton, all
 						<MoviesCard
 							isLikeButton={isLikeButton}
 							isDeleteButton={isDeleteButton}
-							key={film.id}
+							key={film.id || film.movieId}
 							id={film.id}
-							name={film.nameRU}
+							country={film.country}
+							director={film.director}
+							year={film.year}
+							description={film.description}
+							thumbnail={'https://somelink.ru'}
+							nameEN={film.nameEN}
 							duration={film.duration}
-							image={film.image.url}
-							alt={film.image.name}
 							trailerLink={film.trailerLink}
+							name={film.nameRU}
+							image={`https://api.nomoreparties.co${film.image.url}`}
+							alt={film.image.name}
+							handleSaveLikedMovie={handleSaveLikedMovie}
+							onDeleteMovie={onDeleteMovie}
+							film={film}
 						/>
 					))}
 				</ul>
