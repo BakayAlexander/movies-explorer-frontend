@@ -13,6 +13,7 @@ import Register from '../Register/Register';
 import SavedMovies from '../SavedMovies/SavedMovies';
 import { SHORT_MOVIE_DURATION } from '../../utils/config';
 import { checkToken, login, register } from '../../utils/Api/Auth';
+import { updateUserProfile } from '../../utils/Api/MainApi';
 
 function App() {
 	const history = useHistory();
@@ -27,6 +28,7 @@ function App() {
 	const [isShortMoviesChecked, setIsShortMoviesChecked] = useState(false);
 	const [filtredMovies, setFiltredMovies] = useState([]);
 	const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
+	const [isUpdateUserPopupOpen, setIsUpdateUserPopupOpen] = useState(false);
 
 	function handleRegisterNewUser(name, email, password) {
 		register(name, email, password).then((res) => {
@@ -37,10 +39,29 @@ function App() {
 	function handleLoginUser(email, password) {
 		login(email, password).then((res) => {
 			if (res.token) {
-				setIsUserLoggedIn(true);
-				history.push('/movies');
+				checkToken(res.token).then((res) => {
+					setIsUserLoggedIn(true);
+					setCurrentUser(res);
+					setIsUserLoggedIn(true);
+					history.push('/movies');
+				});
 			}
 		});
+	}
+
+	function handleLogoutUser() {
+		localStorage.removeItem('jwt');
+		setIsUserLoggedIn(false);
+		// localStorage.removeItem('userMovies');
+		// localStorage.removeItem('movies');
+		// localStorage.removeItem('sortedMovies');
+		// localStorage.removeItem('currentUser');
+		// setUserMovies([]);
+		// setSortedMovies([]);
+		// setCurrentUser({});
+		// setLoggedIn(false);
+		// setMessage('');
+		history.push('/');
 	}
 
 	useEffect(() => {
@@ -58,7 +79,6 @@ function App() {
 		getMovies()
 			.then((movies) => {
 				setAllMovies(movies);
-
 				setIsLoading(false);
 				setIsApiError(false);
 				if (filterValue) {
@@ -83,6 +103,7 @@ function App() {
 
 	function handleCloseModal() {
 		setIsErrorModalOpen(false);
+		setIsUpdateUserPopupOpen(false);
 	}
 
 	function handleChangeFilterValue(searchInputValue) {
@@ -98,6 +119,22 @@ function App() {
 				return movie.duration <= SHORT_MOVIE_DURATION;
 			});
 		}
+	}
+
+	function handleUpdateUserButtonClick() {
+		setIsUpdateUserPopupOpen(!isUpdateUserPopupOpen);
+	}
+
+	function handleUpdateUserSubmit(email, name) {
+		updateUserProfile(email, name)
+			.then(() => setCurrentUser({ name, email }))
+			.catch((err) => {
+				setErrorData(err);
+				setIsErrorModalOpen(true);
+			})
+			.finally(() => {
+				setIsLoading(false);
+			});
 	}
 
 	function handleCardLike(id, isLiked) {}
@@ -129,7 +166,17 @@ function App() {
 						<SavedMovies films={films} isUserLoggedIn={isUserLoggedIn} />
 					</Route>
 					<Route exact path='/profile'>
-						<Profile isUserLoggedIn={isUserLoggedIn} />
+						<Profile
+							isUserLoggedIn={isUserLoggedIn}
+							isUpdateUserPopupOpen={isUpdateUserPopupOpen}
+							onOpenModal={handleUpdateUserButtonClick}
+							onCloseModal={handleCloseModal}
+							onUpdateUser={handleUpdateUserSubmit}
+							isErrorModalOpen={isErrorModalOpen}
+							errorData={errorData}
+							onLogout={handleLogoutUser}
+							isLoading={isLoading}
+						/>
 					</Route>
 					<Route exact path='/signup'>
 						<Register onRegister={handleRegisterNewUser} />

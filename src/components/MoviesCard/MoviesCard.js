@@ -1,7 +1,7 @@
 import React from 'react';
 import './MoviesCard.css';
 
-function MoviesCard({ id, name, duration, image, alt, isLikeButton, isDeleteButton }) {
+function MoviesCard({ id, name, duration, image, alt, trailerLink, isLikeButton, isDeleteButton }) {
 	// const [isLiked, setIsLiked] = React.useState(false);
 
 	function showDeleteIcon(e) {

@@ -1,5 +1,11 @@
 import { BASE_URL } from '../config';
 
+const headers = {
+	Authorization: `Bearer ${localStorage.getItem('jwt')}`,
+	'Content-Type': 'application/json',
+	Accept: 'application/json',
+};
+
 const prepareDate = (res) => {
 	if (res.ok) {
 		return res.json();
@@ -7,6 +13,13 @@ const prepareDate = (res) => {
 	return Promise.reject(res.status);
 };
 
+export const updateUserProfile = (email, name) => {
+	return fetch(`${BASE_URL}/users/me`, {
+		method: 'PATCH',
+		headers: headers,
+		body: JSON.stringify({ name: name, email: email }),
+	}).then(prepareDate);
+};
 // export const getUserData = (token) => {
 // 	return fetch(`${BASE_URL}/users/me`, {
 // 		method: 'GET',

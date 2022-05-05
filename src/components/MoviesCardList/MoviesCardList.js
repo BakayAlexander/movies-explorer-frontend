@@ -48,6 +48,7 @@ function MoviesCardList({ films, isLikeButton, isDeleteButton, isMoreButton, all
 							duration={film.duration}
 							image={film.image.url}
 							alt={film.image.name}
+							trailerLink={film.trailerLink}
 						/>
 					))}
 				</ul>
