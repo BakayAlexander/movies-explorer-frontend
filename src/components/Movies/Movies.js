@@ -20,8 +20,11 @@ function Movies({
 	isShortMoviesChecked,
 	isUserLoggedIn,
 	handleSaveLikedMovie,
+	isLiked,
+	onDeleteMovie,
+	handleIsLike,
+	likedMovies,
 }) {
-	console.log(films);
 	return (
 		<>
 			<Header isUserLoggedIn={isUserLoggedIn} />
@@ -36,11 +39,15 @@ function Movies({
 				) : !isApiError ? (
 					<MoviesCardList
 						films={films}
+						likedMovies={likedMovies}
 						isMoreButton={true}
-						isLikeButton={true}
-						isDeleteButton={false}
+						isAllMovies={true}
+						isSavedMovies={false}
 						allMovies={allMovies}
 						handleSaveLikedMovie={handleSaveLikedMovie}
+						isLiked={isLiked}
+						onDeleteMovie={onDeleteMovie}
+						handleIsLike={handleIsLike}
 					/>
 				) : (
 					<h2 className='movies__api-error'>

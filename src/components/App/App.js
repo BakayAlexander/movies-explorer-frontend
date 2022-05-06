@@ -14,6 +14,7 @@ import SavedMovies from '../SavedMovies/SavedMovies';
 import { SHORT_MOVIE_DURATION } from '../../utils/config';
 import { checkToken, login, register } from '../../utils/Api/Auth';
 import { deleteLikedMovieApi, getLikedMovies, saveLikedMovieApi, updateUserProfile } from '../../utils/Api/MainApi';
+import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 
 function App() {
 	const history = useHistory();
@@ -53,15 +54,6 @@ function App() {
 	function handleLogoutUser() {
 		localStorage.removeItem('jwt');
 		setIsUserLoggedIn(false);
-		// localStorage.removeItem('userMovies');
-		// localStorage.removeItem('movies');
-		// localStorage.removeItem('sortedMovies');
-		// localStorage.removeItem('currentUser');
-		// setUserMovies([]);
-		// setSortedMovies([]);
-		// setCurrentUser({});
-		// setLoggedIn(false);
-		// setMessage('');
 		history.push('/');
 	}
 
@@ -105,14 +97,9 @@ function App() {
 			});
 	}, [filterValue, isShortMoviesChecked]);
 
-	// const testMovies = localStorage.getItem('findedMovies');
-	// console.log(testMovies);
-
 	useEffect(() => {
 		getLikedMovies().then((res) => setLikedMovies(res));
 	}, [isLiked]);
-
-	console.log(likedMovies);
 
 	function handleCloseModal() {
 		setIsErrorModalOpen(false);
@@ -175,18 +162,24 @@ function App() {
 			id,
 			nameRU,
 			nameEN
-		).then(() => {
-			setIsLiked(true);
-		});
+		);
+		getLikedMovies().then((res) => setLikedMovies(res));
 	}
 
-	function deleteLikedMovie(id) {
-		deleteLikedMovieApi(id);
+	function deleteLikedMovie(_id, id) {
+		if (_id) {
+			deleteLikedMovieApi(_id).then((res) => {
+				setLikedMovies(likedMovies.filter((likedMovie) => likedMovie._id !== res._id));
+			});
+		} else if (id) {
+			const selectedMovie = likedMovies.find((item) => item.movieId === id);
+			deleteLikedMovie(selectedMovie._id);
+		}
 	}
 
-	// useEffect(() => {
-	// 	deleteLikedMovie(17);
-	// }, []);
+	function handleIsLike() {
+		// setIsLiked(!isLiked);
+	}
 
 	return (
 		<div className='page'>
@@ -195,10 +188,31 @@ function App() {
 					<Route exact path='/'>
 						<Main isUserLoggedIn={isUserLoggedIn} />
 					</Route>
-					<Route exact path='/movies'>
+					<ProtectedRoute
+						exact
+						path='/movies'
+						component={Movies}
+						isUserLoggedIn={isUserLoggedIn}
+						films={filtredMovies}
+						likedMovies={likedMovies}
+						isLoading={isLoading}
+						isApiError={isApiError}
+						isErrorModalOpen={isErrorModalOpen}
+						errorData={errorData}
+						onCloseModal={handleCloseModal}
+						onChangeFilterValue={handleChangeFilterValue}
+						onChangeShortMoviesCheckbox={handleChangeShortMoviesCheckbox}
+						isShortMoviesChecked={isShortMoviesChecked}
+						handleSaveLikedMovie={handleSaveLikedMovie}
+						isLiked={isLiked}
+						onDeleteMovie={deleteLikedMovie}
+						handleIsLike={handleIsLike}
+					/>
+					{/* <Route exact path='/movies'>
 						<Movies
 							// films={allMovies}
 							films={filtredMovies}
+							likedMovies={likedMovies}
 							isLoading={isLoading}
 							isApiError={isApiError}
 							isErrorModalOpen={isErrorModalOpen}
@@ -209,12 +223,21 @@ function App() {
 							isShortMoviesChecked={isShortMoviesChecked}
 							isUserLoggedIn={isUserLoggedIn}
 							handleSaveLikedMovie={handleSaveLikedMovie}
+							isLiked={isLiked}
+							onDeleteMovie={deleteLikedMovie}
+							handleIsLike={handleIsLike}
 						/>
-					</Route>
-					<Route exact path='/saved-movies'>
-						<SavedMovies films={likedMovies} isUserLoggedIn={isUserLoggedIn} onDeleteMovie={deleteLikedMovie} />
-					</Route>
-					<Route exact path='/profile'>
+					</Route> */}
+					{/* <Route exact path='/saved-movies'>
+						<SavedMovies
+							films={likedMovies}
+							isLiked={isLiked}
+							isUserLoggedIn={isUserLoggedIn}
+							onDeleteMovie={deleteLikedMovie}
+							handleIsLike={handleIsLike}
+						/>
+					</Route> */}
+					{/* <Route exact path='/profile'>
 						<Profile
 							isUserLoggedIn={isUserLoggedIn}
 							isUpdateUserPopupOpen={isUpdateUserPopupOpen}
@@ -226,7 +249,32 @@ function App() {
 							onLogout={handleLogoutUser}
 							isLoading={isLoading}
 						/>
-					</Route>
+					</Route> */}
+					<ProtectedRoute
+						exact
+						path='/saved-movies'
+						component={SavedMovies}
+						films={likedMovies}
+						isLiked={isLiked}
+						isUserLoggedIn={isUserLoggedIn}
+						onDeleteMovie={deleteLikedMovie}
+						handleIsLike={handleIsLike}
+					/>
+					<ProtectedRoute
+						exact
+						path='/profile'
+						component={Profile}
+						isUserLoggedIn={isUserLoggedIn}
+						isUpdateUserPopupOpen={isUpdateUserPopupOpen}
+						onOpenModal={handleUpdateUserButtonClick}
+						onCloseModal={handleCloseModal}
+						onUpdateUser={handleUpdateUserSubmit}
+						isErrorModalOpen={isErrorModalOpen}
+						errorData={errorData}
+						onLogout={handleLogoutUser}
+						isLoading={isLoading}
+					/>
+
 					<Route exact path='/signup'>
 						<Register onRegister={handleRegisterNewUser} />
 					</Route>

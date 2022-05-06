@@ -13,5 +13,5 @@ const prepareDate = (res) => {
 };
 
 export const getMovies = () => {
-	return fetch(`${MOVIES_URL}`, { method: 'GET', headers: headers }).then((res) => prepareDate(res));
+	return fetch(`${MOVIES_URL}/beatfilm-movies`, { method: 'GET', headers: headers }).then((res) => prepareDate(res));
 };

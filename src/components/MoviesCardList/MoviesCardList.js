@@ -4,12 +4,15 @@ import './MoviesCardList.css';
 
 function MoviesCardList({
 	films,
-	isLikeButton,
-	isDeleteButton,
+	isAllMovies,
+	isSavedMovies,
 	isMoreButton,
 	allMovies,
 	handleSaveLikedMovie,
 	onDeleteMovie,
+	isLiked,
+	handleIsLike,
+	likedMovies,
 }) {
 	const [moviesNumber, setMoviesNumber] = useState(3);
 	const [counterAddMovies, setCounterAddMovies] = useState(0);
@@ -41,31 +44,21 @@ function MoviesCardList({
 		setMoviesNumber(moviesNumber + counterAddMovies);
 	}
 
-	console.log(films);
 	return (
 		<div className='movies-list'>
 			{films.length ? (
 				<ul className='movies-list__container'>
 					{films.slice(0, moviesNumber).map((film) => (
 						<MoviesCard
-							isLikeButton={isLikeButton}
-							isDeleteButton={isDeleteButton}
+							film={film}
 							key={film.id || film.movieId}
-							id={film.id}
-							country={film.country}
-							director={film.director}
-							year={film.year}
-							description={film.description}
-							thumbnail={'https://somelink.ru'}
-							nameEN={film.nameEN}
-							duration={film.duration}
-							trailerLink={film.trailerLink}
-							name={film.nameRU}
-							image={`https://api.nomoreparties.co${film.image.url}`}
-							alt={film.image.name}
+							isAllMovies={isAllMovies}
+							isSavedMovies={isSavedMovies}
 							handleSaveLikedMovie={handleSaveLikedMovie}
 							onDeleteMovie={onDeleteMovie}
-							film={film}
+							isLiked={isLiked}
+							handleIsLike={handleIsLike}
+							likedMovies={likedMovies}
 						/>
 					))}
 				</ul>
