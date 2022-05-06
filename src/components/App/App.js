@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Switch, Route, useHistory } from 'react-router-dom';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
-import { data } from '../../utils/data';
 import { getMovies } from '../../utils/Api/MoviesApi';
 import ErrorModal from '../ErrorModal/ErrorModal';
 import Login from '../Login/Login';
@@ -27,6 +26,7 @@ function App() {
 	const [likedMovies, setLikedMovies] = useState([]);
 	const [isLoading, setIsLoading] = useState(true);
 	const [filterValue, setFilterValue] = useState('');
+	const [filterValueLikedMovies, setFilterValueLikedMovies] = useState('');
 	const [isShortMoviesChecked, setIsShortMoviesChecked] = useState(false);
 	const [filtredMovies, setFiltredMovies] = useState([]);
 	const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
@@ -109,15 +109,35 @@ function App() {
 	function handleChangeFilterValue(searchInputValue) {
 		setFilterValue(searchInputValue);
 	}
+
+	function handleChangeFilterValueLikedFilms(searchInputValue) {
+		setFilterValueLikedMovies(searchInputValue);
+		if (searchInputValue) {
+			const result = likedMovies.filter((movies) => {
+				return movies.nameRU.toLowerCase().includes(searchInputValue.toLowerCase());
+			});
+			// if (isShortMoviesChecked) {
+			// 	return setLikedMovies(filterShortMovies(result));
+			// }
+			return setLikedMovies(result);
+		}
+	}
+
 	function handleChangeShortMoviesCheckbox() {
 		setIsShortMoviesChecked(!isShortMoviesChecked);
 	}
 
+	// function filterShortMovies(arr) {
+	// 	if (arr.length !== 0 || arr !== 'undefined') {
+	// 		return arr.filter((movie) => {
+	// 			return movie.duration <= SHORT_MOVIE_DURATION;
+	// 		});
+	// 	}
+	// }
+
 	function filterShortMovies(arr) {
 		if (arr.length !== 0 || arr !== 'undefined') {
-			return arr.filter((movie) => {
-				return movie.duration <= SHORT_MOVIE_DURATION;
-			});
+			return arr.filter((movie) => (isShortMoviesChecked ? movie.duration <= SHORT_MOVIE_DURATION : true));
 		}
 	}
 
@@ -181,6 +201,10 @@ function App() {
 		// setIsLiked(!isLiked);
 	}
 
+	// console.log(filtredMovies);
+	// console.log(likedMovies);
+	//console.log(filterValue);
+
 	return (
 		<div className='page'>
 			<CurrentUserContext.Provider value={currentUser}>
@@ -208,6 +232,44 @@ function App() {
 						onDeleteMovie={deleteLikedMovie}
 						handleIsLike={handleIsLike}
 					/>
+
+					<ProtectedRoute
+						exact
+						path='/saved-movies'
+						component={SavedMovies}
+						films={filterShortMovies(likedMovies)}
+						isLiked={isLiked}
+						isUserLoggedIn={isUserLoggedIn}
+						onDeleteMovie={deleteLikedMovie}
+						handleIsLike={handleIsLike}
+						onChangeFilterValue={handleChangeFilterValueLikedFilms}
+						onChangeShortMoviesCheckbox={handleChangeShortMoviesCheckbox}
+						isShortMoviesChecked={isShortMoviesChecked}
+					/>
+					<ProtectedRoute
+						exact
+						path='/profile'
+						component={Profile}
+						isUserLoggedIn={isUserLoggedIn}
+						isUpdateUserPopupOpen={isUpdateUserPopupOpen}
+						onOpenModal={handleUpdateUserButtonClick}
+						onCloseModal={handleCloseModal}
+						onUpdateUser={handleUpdateUserSubmit}
+						isErrorModalOpen={isErrorModalOpen}
+						errorData={errorData}
+						onLogout={handleLogoutUser}
+						isLoading={isLoading}
+					/>
+
+					<Route exact path='/signup'>
+						<Register onRegister={handleRegisterNewUser} />
+					</Route>
+					<Route exact path='/signin'>
+						<Login onLogin={handleLoginUser} />
+					</Route>
+					<Route exact path='*'>
+						<NotFound />
+					</Route>
 					{/* <Route exact path='/movies'>
 						<Movies
 							// films={allMovies}
@@ -250,40 +312,6 @@ function App() {
 							isLoading={isLoading}
 						/>
 					</Route> */}
-					<ProtectedRoute
-						exact
-						path='/saved-movies'
-						component={SavedMovies}
-						films={likedMovies}
-						isLiked={isLiked}
-						isUserLoggedIn={isUserLoggedIn}
-						onDeleteMovie={deleteLikedMovie}
-						handleIsLike={handleIsLike}
-					/>
-					<ProtectedRoute
-						exact
-						path='/profile'
-						component={Profile}
-						isUserLoggedIn={isUserLoggedIn}
-						isUpdateUserPopupOpen={isUpdateUserPopupOpen}
-						onOpenModal={handleUpdateUserButtonClick}
-						onCloseModal={handleCloseModal}
-						onUpdateUser={handleUpdateUserSubmit}
-						isErrorModalOpen={isErrorModalOpen}
-						errorData={errorData}
-						onLogout={handleLogoutUser}
-						isLoading={isLoading}
-					/>
-
-					<Route exact path='/signup'>
-						<Register onRegister={handleRegisterNewUser} />
-					</Route>
-					<Route exact path='/signin'>
-						<Login onLogin={handleLoginUser} />
-					</Route>
-					<Route exact path='*'>
-						<NotFound />
-					</Route>
 				</Switch>
 			</CurrentUserContext.Provider>
 		</div>

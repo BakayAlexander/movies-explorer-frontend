@@ -5,12 +5,25 @@ import MoviesCardList from '../MoviesCardList/MoviesCardList';
 import Preloader from '../Preloader/Preloader';
 import SearchForm from '../SearchForm/SearchForm';
 
-function SavedMovies({ films, isUserLoggedIn, onDeleteMovie, isLiked, handleIsLike }) {
+function SavedMovies({
+	films,
+	isUserLoggedIn,
+	onDeleteMovie,
+	isLiked,
+	handleIsLike,
+	onChangeFilterValue,
+	onChangeShortMoviesCheckbox,
+	isShortMoviesChecked,
+}) {
 	return (
 		<>
 			<Header isUserLoggedIn={isUserLoggedIn} />
 			<section>
-				<SearchForm />
+				<SearchForm
+					onChangeFilterValue={onChangeFilterValue}
+					onChangeShortMoviesCheckbox={onChangeShortMoviesCheckbox}
+					isShortMoviesChecked={isShortMoviesChecked}
+				/>
 				{/* <Preloader /> */}
 				<MoviesCardList
 					films={films}
