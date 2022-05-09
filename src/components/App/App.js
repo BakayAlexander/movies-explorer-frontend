@@ -17,18 +17,21 @@ import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 
 function App() {
 	const history = useHistory();
+	const previouslyFilterValue = JSON.parse(localStorage.getItem('previouslyFilterValue'));
+	const previouslySearchedMovies = JSON.parse(localStorage.getItem('previouslySearchedMovies'));
+	const isShortMoviesPreviouslyChecked = JSON.parse(localStorage.getItem('isShortMoviesPreviouslyChecked'));
 	const [currentUser, setCurrentUser] = useState({});
 	const [allMovies, setAllMovies] = useState([]);
 	const [isApiError, setIsApiError] = useState(false);
 	const [errorData, setErrorData] = useState('');
 	const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
-	const [isLiked, setIsLiked] = useState(false);
 	const [likedMovies, setLikedMovies] = useState([]);
 	const [isLoading, setIsLoading] = useState(true);
 	const [filterValue, setFilterValue] = useState('');
-	const [filterValueLikedMovies, setFilterValueLikedMovies] = useState('');
-	const [isShortMoviesChecked, setIsShortMoviesChecked] = useState(false);
-	const [filtredMovies, setFiltredMovies] = useState([]);
+	// const [filterValueLikedMovies, setFilterValueLikedMovies] = useState('');
+	const [isShortMoviesChecked, setIsShortMoviesChecked] = useState(isShortMoviesPreviouslyChecked || false);
+	const [isShortLikedMoviesChecked, setIsShortLikedMoviesChecked] = useState(false);
+	const [filtredMovies, setFiltredMovies] = useState(previouslySearchedMovies || []);
 	const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
 	const [isUpdateUserPopupOpen, setIsUpdateUserPopupOpen] = useState(false);
 
@@ -53,6 +56,8 @@ function App() {
 
 	function handleLogoutUser() {
 		localStorage.removeItem('jwt');
+		localStorage.removeItem('previouslyFilterValue');
+		localStorage.removeItem('previouslySearchedMovies');
 		setIsUserLoggedIn(false);
 		history.push('/');
 	}
@@ -78,12 +83,8 @@ function App() {
 					const result = movies.filter((movie) => {
 						return movie.nameRU.toLowerCase().includes(filterValue.toLowerCase().trim());
 					});
-					if (isShortMoviesChecked) {
-						console.log(filterShortMovies(result));
-						// localStorage.setItem('findedMovies', JSON.stringify('shot movie'));
-						return setFiltredMovies(filterShortMovies(result));
-					}
-					// localStorage.setItem('findedMovies', JSON.stringify(result));
+					localStorage.setItem('previouslySearchedMovies', JSON.stringify(result));
+					localStorage.setItem('previouslyFilterValue', JSON.stringify(filterValue));
 					return setFiltredMovies(result);
 				}
 			})
@@ -99,7 +100,7 @@ function App() {
 
 	useEffect(() => {
 		getLikedMovies().then((res) => setLikedMovies(res));
-	}, [isLiked]);
+	}, []);
 
 	function handleCloseModal() {
 		setIsErrorModalOpen(false);
@@ -111,14 +112,10 @@ function App() {
 	}
 
 	function handleChangeFilterValueLikedFilms(searchInputValue) {
-		setFilterValueLikedMovies(searchInputValue);
 		if (searchInputValue) {
 			const result = likedMovies.filter((movies) => {
 				return movies.nameRU.toLowerCase().includes(searchInputValue.toLowerCase());
 			});
-			// if (isShortMoviesChecked) {
-			// 	return setLikedMovies(filterShortMovies(result));
-			// }
 			return setLikedMovies(result);
 		}
 	}
@@ -127,17 +124,24 @@ function App() {
 		setIsShortMoviesChecked(!isShortMoviesChecked);
 	}
 
-	// function filterShortMovies(arr) {
-	// 	if (arr.length !== 0 || arr !== 'undefined') {
-	// 		return arr.filter((movie) => {
-	// 			return movie.duration <= SHORT_MOVIE_DURATION;
-	// 		});
-	// 	}
-	// }
+	function handleChangeShortMoviesCheckboxLikedFilms() {
+		setIsShortLikedMoviesChecked(!isShortLikedMoviesChecked);
+	}
 
 	function filterShortMovies(arr) {
+		if (isShortMoviesChecked) {
+			localStorage.setItem('isShortMoviesPreviouslyChecked', JSON.stringify(isShortMoviesChecked));
+		} else {
+			localStorage.setItem('isShortMoviesPreviouslyChecked', false);
+		}
 		if (arr.length !== 0 || arr !== 'undefined') {
 			return arr.filter((movie) => (isShortMoviesChecked ? movie.duration <= SHORT_MOVIE_DURATION : true));
+		}
+	}
+
+	function filterShortLikedMovies(arr) {
+		if (arr.length !== 0 || arr !== 'undefined') {
+			return arr.filter((movie) => (isShortLikedMoviesChecked ? movie.duration <= SHORT_MOVIE_DURATION : true));
 		}
 	}
 
@@ -197,14 +201,6 @@ function App() {
 		}
 	}
 
-	function handleIsLike() {
-		// setIsLiked(!isLiked);
-	}
-
-	// console.log(filtredMovies);
-	// console.log(likedMovies);
-	//console.log(filterValue);
-
 	return (
 		<div className='page'>
 			<CurrentUserContext.Provider value={currentUser}>
@@ -217,7 +213,7 @@ function App() {
 						path='/movies'
 						component={Movies}
 						isUserLoggedIn={isUserLoggedIn}
-						films={filtredMovies}
+						films={filterShortMovies(filtredMovies)}
 						likedMovies={likedMovies}
 						isLoading={isLoading}
 						isApiError={isApiError}
@@ -228,23 +224,20 @@ function App() {
 						onChangeShortMoviesCheckbox={handleChangeShortMoviesCheckbox}
 						isShortMoviesChecked={isShortMoviesChecked}
 						handleSaveLikedMovie={handleSaveLikedMovie}
-						isLiked={isLiked}
 						onDeleteMovie={deleteLikedMovie}
-						handleIsLike={handleIsLike}
+						previouslyFilterValue={previouslyFilterValue}
 					/>
 
 					<ProtectedRoute
 						exact
 						path='/saved-movies'
 						component={SavedMovies}
-						films={filterShortMovies(likedMovies)}
-						isLiked={isLiked}
+						films={filterShortLikedMovies(likedMovies)}
 						isUserLoggedIn={isUserLoggedIn}
 						onDeleteMovie={deleteLikedMovie}
-						handleIsLike={handleIsLike}
 						onChangeFilterValue={handleChangeFilterValueLikedFilms}
-						onChangeShortMoviesCheckbox={handleChangeShortMoviesCheckbox}
-						isShortMoviesChecked={isShortMoviesChecked}
+						onChangeShortMoviesCheckbox={handleChangeShortMoviesCheckboxLikedFilms}
+						isShortMoviesChecked={isShortLikedMoviesChecked}
 					/>
 					<ProtectedRoute
 						exact
@@ -270,48 +263,6 @@ function App() {
 					<Route exact path='*'>
 						<NotFound />
 					</Route>
-					{/* <Route exact path='/movies'>
-						<Movies
-							// films={allMovies}
-							films={filtredMovies}
-							likedMovies={likedMovies}
-							isLoading={isLoading}
-							isApiError={isApiError}
-							isErrorModalOpen={isErrorModalOpen}
-							errorData={errorData}
-							onCloseModal={handleCloseModal}
-							onChangeFilterValue={handleChangeFilterValue}
-							onChangeShortMoviesCheckbox={handleChangeShortMoviesCheckbox}
-							isShortMoviesChecked={isShortMoviesChecked}
-							isUserLoggedIn={isUserLoggedIn}
-							handleSaveLikedMovie={handleSaveLikedMovie}
-							isLiked={isLiked}
-							onDeleteMovie={deleteLikedMovie}
-							handleIsLike={handleIsLike}
-						/>
-					</Route> */}
-					{/* <Route exact path='/saved-movies'>
-						<SavedMovies
-							films={likedMovies}
-							isLiked={isLiked}
-							isUserLoggedIn={isUserLoggedIn}
-							onDeleteMovie={deleteLikedMovie}
-							handleIsLike={handleIsLike}
-						/>
-					</Route> */}
-					{/* <Route exact path='/profile'>
-						<Profile
-							isUserLoggedIn={isUserLoggedIn}
-							isUpdateUserPopupOpen={isUpdateUserPopupOpen}
-							onOpenModal={handleUpdateUserButtonClick}
-							onCloseModal={handleCloseModal}
-							onUpdateUser={handleUpdateUserSubmit}
-							isErrorModalOpen={isErrorModalOpen}
-							errorData={errorData}
-							onLogout={handleLogoutUser}
-							isLoading={isLoading}
-						/>
-					</Route> */}
 				</Switch>
 			</CurrentUserContext.Provider>
 		</div>
