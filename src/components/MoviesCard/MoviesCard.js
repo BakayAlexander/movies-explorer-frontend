@@ -1,5 +1,5 @@
 import React from 'react';
-import { MOVIES_URL } from '../../utils/config';
+import { DEFAULT_DATA_NOT_AVAILABLE, DEFAULT_URL_NOT_AVAILABLE, MOVIES_URL } from '../../utils/config';
 import './MoviesCard.css';
 
 function MoviesCard({
@@ -11,6 +11,8 @@ function MoviesCard({
 	handleIsLike,
 	likedMovies,
 }) {
+	const isMobile = window.screen.width <= 1024;
+
 	function showDeleteIcon(e) {
 		if (!isSavedMovies) return;
 		const card = e.currentTarget;
@@ -30,17 +32,17 @@ function MoviesCard({
 		const button = e.currentTarget;
 		if (!button.classList.contains('movies-card__like-button_active')) {
 			handleSaveLikedMovie(
-				film.country,
-				film.director,
-				film.duration,
-				film.year,
-				film.description,
-				MOVIES_URL + film.image.url,
-				film.trailerLink,
-				MOVIES_URL + film.image.formats.thumbnail.url,
+				film.country || DEFAULT_DATA_NOT_AVAILABLE,
+				film.director || DEFAULT_DATA_NOT_AVAILABLE,
+				film.duration || 1,
+				film.year || DEFAULT_DATA_NOT_AVAILABLE,
+				film.description || DEFAULT_DATA_NOT_AVAILABLE,
+				MOVIES_URL + film.image.url || DEFAULT_URL_NOT_AVAILABLE,
+				film.trailerLink || DEFAULT_URL_NOT_AVAILABLE,
+				MOVIES_URL + film.image.formats.thumbnail.url || DEFAULT_URL_NOT_AVAILABLE,
 				film.id,
-				film.nameRU,
-				film.nameEN
+				film.nameRU || DEFAULT_DATA_NOT_AVAILABLE,
+				film.nameEN || DEFAULT_DATA_NOT_AVAILABLE
 			);
 			button.classList.add('movies-card__like-button_active');
 		} else if (button.classList.contains('movies-card__like-button_active')) {
@@ -51,14 +53,10 @@ function MoviesCard({
 
 	function hadleClickDeleteButton() {
 		onDeleteMovie(film._id, film.id);
-		// handleIsLike();
 	}
 
-	// const isLiked = likedMovies.some((likedMovie) => likedMovie.movieId === film.id);
-	// console.log(isLiked);
-
 	return (
-		<li className='movies-card' onMouseEnter={showDeleteIcon} onMouseLeave={hideDeleteIcon}>
+		<li className='movies-card' onMouseOver={showDeleteIcon} onMouseLeave={hideDeleteIcon}>
 			<img
 				className='movies-card__image'
 				src={isAllMovies ? MOVIES_URL + film.image.url : film.image}
@@ -84,7 +82,9 @@ function MoviesCard({
 					onClick={handleLikeClick}
 				></button>
 				<button
-					className={` ${isSavedMovies ? 'movies-card__delete-button' : 'movies-card__delete-button_disable'}`}
+					className={` ${isSavedMovies ? 'movies-card__delete-button' : 'movies-card__delete-button_disable'} ${
+						isMobile && 'movies-card__delete-button_active'
+					}`}
 					type='button'
 					aria-label='Удалить карточку'
 					onClick={hadleClickDeleteButton}

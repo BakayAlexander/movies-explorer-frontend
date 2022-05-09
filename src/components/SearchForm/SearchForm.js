@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import FilterCheckbox from '../FilterCheckbox/FilterCheckbox';
 import './SearchForm.css';
 
-function SearchForm({ onChangeFilterValue, onChangeShortMoviesCheckbox, isShortMoviesChecked }) {
-	const [movie, setMovie] = React.useState('');
+function SearchForm({ onChangeFilterValue, onChangeShortMoviesCheckbox, isShortMoviesChecked, previouslyFilterValue }) {
+	const [movie, setMovie] = useState(previouslyFilterValue || '');
 
 	function handleChangeMovie(e) {
 		setMovie(e.target.value);

@@ -20,10 +20,10 @@ function Movies({
 	isShortMoviesChecked,
 	isUserLoggedIn,
 	handleSaveLikedMovie,
-	isLiked,
 	onDeleteMovie,
 	handleIsLike,
 	likedMovies,
+	previouslyFilterValue,
 }) {
 	return (
 		<>
@@ -33,6 +33,7 @@ function Movies({
 					onChangeFilterValue={onChangeFilterValue}
 					onChangeShortMoviesCheckbox={onChangeShortMoviesCheckbox}
 					isShortMoviesChecked={isShortMoviesChecked}
+					previouslyFilterValue={previouslyFilterValue}
 				/>
 				{isLoading ? (
 					<Preloader />
@@ -45,7 +46,6 @@ function Movies({
 						isSavedMovies={false}
 						allMovies={allMovies}
 						handleSaveLikedMovie={handleSaveLikedMovie}
-						isLiked={isLiked}
 						onDeleteMovie={onDeleteMovie}
 						handleIsLike={handleIsLike}
 					/>

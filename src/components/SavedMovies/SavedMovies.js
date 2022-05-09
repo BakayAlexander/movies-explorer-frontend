@@ -9,7 +9,6 @@ function SavedMovies({
 	films,
 	isUserLoggedIn,
 	onDeleteMovie,
-	isLiked,
 	handleIsLike,
 	onChangeFilterValue,
 	onChangeShortMoviesCheckbox,
@@ -31,7 +30,6 @@ function SavedMovies({
 					isAllMovies={false}
 					isSavedMovies={true}
 					onDeleteMovie={onDeleteMovie}
-					isLiked={isLiked}
 					handleIsLike={handleIsLike}
 				/>
 			</section>

@@ -10,35 +10,40 @@ function MoviesCardList({
 	allMovies,
 	handleSaveLikedMovie,
 	onDeleteMovie,
-	isLiked,
 	handleIsLike,
 	likedMovies,
 }) {
-	const [moviesNumber, setMoviesNumber] = useState(3);
+	const [moviesNumber, setMoviesNumber] = useState(0);
 	const [counterAddMovies, setCounterAddMovies] = useState(0);
 
-	const display = window.screen.width;
+	let display = window.screen.width;
+
+	// let display = setTimeout(() => window.screen.width, 1000);
 
 	function displayWidthCheck(display) {
 		if (display >= 1280) {
-			setMoviesNumber(12);
+			if (moviesNumber === 0) {
+				setMoviesNumber(12);
+			} else {
+			}
 			setCounterAddMovies(3);
 		} else if (display >= 768) {
-			setMoviesNumber(8);
+			if (moviesNumber === 0) {
+				setMoviesNumber(8);
+			}
+
 			setCounterAddMovies(2);
-		} else if (display >= 320) {
-			setMoviesNumber(5);
+		} else if (display >= 320 && display <= 480) {
+			if (moviesNumber === 0) {
+				setMoviesNumber(5);
+			}
 			setCounterAddMovies(2);
 		}
 	}
 
 	useEffect(() => {
-		displayWidthCheck(display);
+		displayWidthCheck(window.screen.width);
 	}, [display]);
-
-	// window.addEventListener('resize', () => {
-	// 	setTimeout(displayWidthCheck(display), 2000);
-	// });
 
 	function handleClickAddMoreMovies() {
 		setMoviesNumber(moviesNumber + counterAddMovies);
@@ -56,7 +61,6 @@ function MoviesCardList({
 							isSavedMovies={isSavedMovies}
 							handleSaveLikedMovie={handleSaveLikedMovie}
 							onDeleteMovie={onDeleteMovie}
-							isLiked={isLiked}
 							handleIsLike={handleIsLike}
 							likedMovies={likedMovies}
 						/>
