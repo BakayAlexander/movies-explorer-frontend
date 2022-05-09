@@ -7,6 +7,7 @@ import SearchForm from '../SearchForm/SearchForm';
 
 function SavedMovies({
 	films,
+	isLoading,
 	isUserLoggedIn,
 	onDeleteMovie,
 	handleIsLike,
@@ -23,15 +24,18 @@ function SavedMovies({
 					onChangeShortMoviesCheckbox={onChangeShortMoviesCheckbox}
 					isShortMoviesChecked={isShortMoviesChecked}
 				/>
-				{/* <Preloader /> */}
-				<MoviesCardList
-					films={films}
-					isMoreButton={true}
-					isAllMovies={false}
-					isSavedMovies={true}
-					onDeleteMovie={onDeleteMovie}
-					handleIsLike={handleIsLike}
-				/>
+				{isLoading ? (
+					<Preloader />
+				) : (
+					<MoviesCardList
+						films={films}
+						isMoreButton={false}
+						isAllMovies={false}
+						isSavedMovies={true}
+						onDeleteMovie={onDeleteMovie}
+						handleIsLike={handleIsLike}
+					/>
+				)}
 			</section>
 			<Footer />
 		</>

@@ -60,18 +60,33 @@ function MoviesCardList({
 		<div className='movies-list'>
 			{renderingMovies.length ? (
 				<ul className='movies-list__container'>
-					{renderingMovies.slice(0, moviesNumber).map((film) => (
-						<MoviesCard
-							film={film}
-							key={film.id || film.movieId}
-							isAllMovies={isAllMovies}
-							isSavedMovies={isSavedMovies}
-							handleSaveLikedMovie={handleSaveLikedMovie}
-							onDeleteMovie={onDeleteMovie}
-							handleIsLike={handleIsLike}
-							likedMovies={likedMovies}
-						/>
-					))}
+					{isAllMovies && !isSavedMovies
+						? renderingMovies
+								.slice(0, moviesNumber)
+								.map((film) => (
+									<MoviesCard
+										film={film}
+										key={film.id || film.movieId}
+										isAllMovies={isAllMovies}
+										isSavedMovies={isSavedMovies}
+										handleSaveLikedMovie={handleSaveLikedMovie}
+										onDeleteMovie={onDeleteMovie}
+										handleIsLike={handleIsLike}
+										likedMovies={likedMovies}
+									/>
+								))
+						: renderingMovies.map((film) => (
+								<MoviesCard
+									film={film}
+									key={film.id || film.movieId}
+									isAllMovies={isAllMovies}
+									isSavedMovies={isSavedMovies}
+									handleSaveLikedMovie={handleSaveLikedMovie}
+									onDeleteMovie={onDeleteMovie}
+									handleIsLike={handleIsLike}
+									likedMovies={likedMovies}
+								/>
+						  ))}
 				</ul>
 			) : (
 				<p className='movies-list__no-films-searched'>Мы ничего не нашли по вашему запросу.</p>

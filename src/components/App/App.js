@@ -79,9 +79,10 @@ function App() {
 		getMovies()
 			.then((movies) => {
 				setAllMovies(movies);
-				setIsLoading(false);
+				// setIsLoading(false);
 				setIsApiError(false);
 				if (filterValue) {
+					// setIsLoading(true);
 					const result = movies.filter((movie) => {
 						return movie.nameRU.toLowerCase().includes(filterValue.toLowerCase().trim());
 					});
@@ -101,7 +102,12 @@ function App() {
 	}, [filterValue, isShortMoviesChecked]);
 
 	useEffect(() => {
-		getLikedMovies().then((res) => setLikedMovies(res));
+		setIsLoading(true);
+		getLikedMovies()
+			.then((res) => setLikedMovies(res))
+			.finally(() => {
+				setIsLoading(false);
+			});
 	}, [currentUser]);
 
 	function handleCloseModal() {
@@ -236,6 +242,7 @@ function App() {
 						path='/saved-movies'
 						component={SavedMovies}
 						films={filterShortLikedMovies(likedMovies)}
+						isLoading={isLoading}
 						isUserLoggedIn={isUserLoggedIn}
 						onDeleteMovie={deleteLikedMovie}
 						onChangeFilterValue={handleChangeFilterValueLikedFilms}
