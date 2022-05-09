@@ -30,7 +30,6 @@ function App() {
 	const [likedMovies, setLikedMovies] = useState([]);
 	const [isLoading, setIsLoading] = useState(true);
 	const [filterValue, setFilterValue] = useState('');
-	// const [filterValueLikedMovies, setFilterValueLikedMovies] = useState('');
 	const [isShortMoviesChecked, setIsShortMoviesChecked] = useState(isShortMoviesPreviouslyChecked || false);
 	const [isShortLikedMoviesChecked, setIsShortLikedMoviesChecked] = useState(false);
 	const [filtredMovies, setFiltredMovies] = useState(previouslySearchedMovies || []);
@@ -103,7 +102,7 @@ function App() {
 
 	useEffect(() => {
 		getLikedMovies().then((res) => setLikedMovies(res));
-	}, []);
+	}, [currentUser]);
 
 	function handleCloseModal() {
 		setIsErrorModalOpen(false);
@@ -218,6 +217,7 @@ function App() {
 						isUserLoggedIn={isUserLoggedIn}
 						films={filterShortMovies(filtredMovies)}
 						likedMovies={likedMovies}
+						allMovies={allMovies}
 						isLoading={isLoading}
 						isApiError={isApiError}
 						isErrorModalOpen={isErrorModalOpen}

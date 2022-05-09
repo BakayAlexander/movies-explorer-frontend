@@ -20,8 +20,8 @@ function Profile({
 	const currentUser = useContext(CurrentUserContext);
 	const [name, setName] = useState('');
 	const [email, setEmail] = useState('');
-	const [isNameValid, setIsNameValid] = useState(false);
-	const [isEmailValid, setIsEmailValid] = useState(false);
+	const [isNameValid, setIsNameValid] = useState(true);
+	const [isEmailValid, setIsEmailValid] = useState(true);
 	const [errorValidationName, setErrorValidationName] = useState('');
 	const [errorValidationEmail, setErrorValidationEmail] = useState('');
 
@@ -31,32 +31,53 @@ function Profile({
 	}, [currentUser]);
 
 	function handleInputNameChange(e) {
-		console.log(e.target.value);
 		setIsNameValid(REG_EXP_NAME.test(e.target.value));
-		console.log(isNameValid);
-		if (!isNameValid) {
-			setErrorValidationName('Имя содержит недопустимые символы');
-		} else {
-			if (e.target.value.length < 2) {
-				setErrorValidationName('Длина имени должна быть не менее 2 символов');
-			} else if (e.target.value.length > 30) {
-				setErrorValidationName('Длина имени должна должна быть не более 30 символов');
-			} else {
-				setErrorValidationName('');
-			}
-		}
 		setName(e.target.value);
 	}
 
 	function handleInputEmailChange(e) {
 		setIsEmailValid(REG_EXP_EMAIL.test(e.target.value));
+		setEmail(e.target.value);
+	}
+
+	function validateName(name) {
+		if (currentUser.name === name) {
+			setIsNameValid(false);
+			return setErrorValidationName('Введите другое имя');
+		}
+		if (isNameValid) {
+			if (name.length < 2) {
+				setIsNameValid(false);
+				return setErrorValidationName('Длина имени должна быть не менее 2 символов');
+			} else if (name.length > 30) {
+				setIsNameValid(false);
+				return setErrorValidationName('Длина имени должна должна быть не более 30 символов');
+			} else {
+				return setErrorValidationName('');
+			}
+		}
+		if (!isNameValid) {
+			return setErrorValidationName('Имя содержит недопустимые символы');
+		}
+	}
+
+	function validateEmail(email) {
+		if (currentUser.email === email) {
+			setIsEmailValid(false);
+			return setErrorValidationEmail('Введите другой email');
+		}
 		if (!isEmailValid) {
-			setErrorValidationEmail('Email содержит недопустимые символы');
+			setIsEmailValid(false);
+			setErrorValidationEmail('Пожалуйста введите валидный email');
 		} else {
 			setErrorValidationEmail('');
 		}
-		setEmail(e.target.value);
 	}
+
+	useEffect(() => {
+		validateName(name);
+		validateEmail(email);
+	}, [name, email]);
 
 	function handleSubmitUpdateUser(e) {
 		e.preventDefault();
@@ -98,7 +119,7 @@ function Profile({
 					<label className='profile__form-label'>
 						Имя
 						<input className='profile__input' type='text' value={name || ''} onChange={handleInputNameChange} />
-						{errorValidationName && (
+						{!isNameValid && (
 							<span className='profile__input-span-error' id='email-input-error'>
 								{errorValidationName}
 							</span>
@@ -107,7 +128,7 @@ function Profile({
 					<label className='profile__form-label'>
 						Email
 						<input className='profile__input' type='email' value={email || ''} onChange={handleInputEmailChange} />
-						{errorValidationEmail && (
+						{!isEmailValid && (
 							<span className='profile__input-span-error' id='email-input-error'>
 								{errorValidationEmail}
 							</span>
@@ -116,13 +137,7 @@ function Profile({
 					<button
 						className='profile__form-submit-button'
 						type='submit'
-						disabled={
-							!(
-								!errorValidationName &&
-								!errorValidationEmail &&
-								(currentUser.name !== name || currentUser.email !== email)
-							)
-						}
+						disabled={!(isNameValid && isEmailValid && (currentUser.name !== name || currentUser.email !== email))}
 					>
 						Сохранить
 					</button>

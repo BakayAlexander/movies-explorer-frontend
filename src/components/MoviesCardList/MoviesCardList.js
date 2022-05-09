@@ -15,10 +15,13 @@ function MoviesCardList({
 }) {
 	const [moviesNumber, setMoviesNumber] = useState(0);
 	const [counterAddMovies, setCounterAddMovies] = useState(0);
+	const [renderingMovies, setRenderingMovies] = useState([]);
+
+	useEffect(() => {
+		setRenderingMovies(films);
+	}, [films]);
 
 	let display = window.screen.width;
-
-	// let display = setTimeout(() => window.screen.width, 1000);
 
 	function displayWidthCheck(display) {
 		if (display >= 1280) {
@@ -49,11 +52,15 @@ function MoviesCardList({
 		setMoviesNumber(moviesNumber + counterAddMovies);
 	}
 
+	function handleClickShowAllMovies() {
+		setRenderingMovies(allMovies);
+	}
+
 	return (
 		<div className='movies-list'>
-			{films.length ? (
+			{renderingMovies.length ? (
 				<ul className='movies-list__container'>
-					{films.slice(0, moviesNumber).map((film) => (
+					{renderingMovies.slice(0, moviesNumber).map((film) => (
 						<MoviesCard
 							film={film}
 							key={film.id || film.movieId}
@@ -69,8 +76,7 @@ function MoviesCardList({
 			) : (
 				<p className='movies-list__no-films-searched'>Мы ничего не нашли по вашему запросу.</p>
 			)}
-
-			{isMoreButton && films.length > moviesNumber && (
+			{isMoreButton && renderingMovies.length > moviesNumber && (
 				<button
 					className='movies-list_add-button'
 					type='button'
@@ -78,6 +84,16 @@ function MoviesCardList({
 					onClick={handleClickAddMoreMovies}
 				>
 					Ещё
+				</button>
+			)}
+			{isAllMovies && !films.length && renderingMovies.length === 0 && (
+				<button
+					className='movies-list_add-button'
+					type='button'
+					aria-label='Загрузить все фильмы'
+					onClick={handleClickShowAllMovies}
+				>
+					Показать все фильмы
 				</button>
 			)}
 		</div>

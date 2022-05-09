@@ -26,7 +26,7 @@ function SavedMovies({
 				{/* <Preloader /> */}
 				<MoviesCardList
 					films={films}
-					isMoreButton={false}
+					isMoreButton={true}
 					isAllMovies={false}
 					isSavedMovies={true}
 					onDeleteMovie={onDeleteMovie}

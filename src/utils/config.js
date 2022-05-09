@@ -7,3 +7,4 @@ export const DEFAULT_DATA_NOT_AVAILABLE = 'This information not available';
 
 export const REG_EXP_NAME = /^[А-Яа-яa-zA-Z- ]+$/;
 export const REG_EXP_EMAIL = /^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i;
+export const REG_EXP_PASSWORD = /^[A-Za-z0-9-!@#$%^&*]+$/;
