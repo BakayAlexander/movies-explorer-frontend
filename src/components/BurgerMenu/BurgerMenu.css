@@ -85,6 +85,10 @@
 	background-color: #313131;
 }
 
+.burger-menu__link_active {
+	font-weight: 600;
+}
+
 @media screen and (max-width: 600px) {
 	.burger-menu__container {
 		width: 100%;

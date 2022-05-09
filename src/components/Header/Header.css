@@ -130,6 +130,10 @@
 	display: none;
 }
 
+.header__link_active {
+	font-weight: 600;
+}
+
 @media screen and (max-width: 768px) {
 	.header__container {
 		max-width: calc(100% - 60px);

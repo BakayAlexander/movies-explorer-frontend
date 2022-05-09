@@ -14,9 +14,11 @@ import { SHORT_MOVIE_DURATION } from '../../utils/config';
 import { checkToken, login, register } from '../../utils/Api/Auth';
 import { deleteLikedMovieApi, getLikedMovies, saveLikedMovieApi, updateUserProfile } from '../../utils/Api/MainApi';
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
+import { useLocation } from 'react-router-dom';
 
 function App() {
 	const history = useHistory();
+	const currentPath = useLocation();
 	const previouslyFilterValue = JSON.parse(localStorage.getItem('previouslyFilterValue'));
 	const previouslySearchedMovies = JSON.parse(localStorage.getItem('previouslySearchedMovies'));
 	const isShortMoviesPreviouslyChecked = JSON.parse(localStorage.getItem('isShortMoviesPreviouslyChecked'));
@@ -63,12 +65,13 @@ function App() {
 	}
 
 	useEffect(() => {
+		const path = currentPath.pathname;
 		if (localStorage.getItem('jwt')) {
 			const token = localStorage.getItem('jwt');
 			checkToken(token).then((res) => {
 				setCurrentUser(res);
 				setIsUserLoggedIn(true);
-				history.push('/movies');
+				history.push(path);
 			});
 		}
 	}, []);

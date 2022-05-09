@@ -20,8 +20,8 @@ function Profile({
 	const currentUser = useContext(CurrentUserContext);
 	const [name, setName] = useState('');
 	const [email, setEmail] = useState('');
-	const [isNameValid, setIsNameValid] = useState(true);
-	const [isEmailValid, setIsEmailValid] = useState(true);
+	const [isNameValid, setIsNameValid] = useState(false);
+	const [isEmailValid, setIsEmailValid] = useState(false);
 	const [errorValidationName, setErrorValidationName] = useState('');
 	const [errorValidationEmail, setErrorValidationEmail] = useState('');
 
@@ -31,15 +31,19 @@ function Profile({
 	}, [currentUser]);
 
 	function handleInputNameChange(e) {
+		console.log(e.target.value);
 		setIsNameValid(REG_EXP_NAME.test(e.target.value));
-		if (e.target.value.length < 2) {
-			setErrorValidationName('Длина имени должна быть не менее 2 символов');
-		} else if (e.target.value.length > 30) {
-			setErrorValidationName('Длина имени должна должна быть не более 30 символов');
-		} else if (!isNameValid) {
+		console.log(isNameValid);
+		if (!isNameValid) {
 			setErrorValidationName('Имя содержит недопустимые символы');
 		} else {
-			setErrorValidationName('');
+			if (e.target.value.length < 2) {
+				setErrorValidationName('Длина имени должна быть не менее 2 символов');
+			} else if (e.target.value.length > 30) {
+				setErrorValidationName('Длина имени должна должна быть не более 30 символов');
+			} else {
+				setErrorValidationName('');
+			}
 		}
 		setName(e.target.value);
 	}
