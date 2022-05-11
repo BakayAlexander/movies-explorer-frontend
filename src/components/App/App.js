@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { Switch, Route, useHistory } from 'react-router-dom';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import { getMovies } from '../../utils/Api/MoviesApi';
-import ErrorModal from '../ErrorModal/ErrorModal';
 import Login from '../Login/Login';
 import Main from '../Main/Main';
 import Movies from '../Movies/Movies';
@@ -12,9 +11,16 @@ import Register from '../Register/Register';
 import SavedMovies from '../SavedMovies/SavedMovies';
 import { SHORT_MOVIE_DURATION } from '../../utils/config';
 import { checkToken, login, register } from '../../utils/Api/Auth';
-import { deleteLikedMovieApi, getLikedMovies, saveLikedMovieApi, updateUserProfile } from '../../utils/Api/MainApi';
+import {
+	deleteLikedMovieApi,
+	getLikedMovies,
+	getUserProfile,
+	saveLikedMovieApi,
+	updateUserProfile,
+} from '../../utils/Api/MainApi';
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 import { useLocation } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 
 function App() {
 	const history = useHistory();
@@ -22,6 +28,7 @@ function App() {
 	const previouslyFilterValue = JSON.parse(localStorage.getItem('previouslyFilterValue'));
 	const previouslySearchedMovies = JSON.parse(localStorage.getItem('previouslySearchedMovies'));
 	const isShortMoviesPreviouslyChecked = JSON.parse(localStorage.getItem('isShortMoviesPreviouslyChecked'));
+	let token = localStorage.getItem('jwt');
 	const [currentUser, setCurrentUser] = useState({});
 	const [allMovies, setAllMovies] = useState([]);
 	const [isApiError, setIsApiError] = useState(false);
@@ -36,53 +43,114 @@ function App() {
 	const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
 	const [isUpdateUserPopupOpen, setIsUpdateUserPopupOpen] = useState(false);
 
-	function handleRegisterNewUser(name, email, password) {
-		register(name, email, password).then((res) => {
-			history.push('/signin');
-		});
-	}
-
-	function handleLoginUser(email, password) {
-		login(email, password).then((res) => {
-			if (res.token) {
-				checkToken(res.token).then((res) => {
-					setIsUserLoggedIn(true);
+	useEffect(() => {
+		// console.log('отработала проверка токена');
+		const path = currentPath.pathname;
+		if (localStorage.getItem('jwt')) {
+			const token = localStorage.getItem('jwt');
+			checkToken(token)
+				.then((res) => {
 					setCurrentUser(res);
 					setIsUserLoggedIn(true);
-					history.push('/movies');
+					history.push(path);
+				})
+				.catch((err) => {
+					console.log(err);
 				});
-			}
-		});
+		}
+	}, []);
+
+	useEffect(() => {
+		setIsLoading(true);
+		getLikedMovies()
+			.then((res) => {
+				// console.log('запросили с сервера сохраненные');
+				setLikedMovies(res);
+			})
+			.finally(() => {
+				setIsLoading(false);
+			});
+	}, []);
+
+	// console.log(isUserLoggedIn);
+
+	// useEffect(() => {
+	// 	const token = localStorage.getItem('jwt');
+	// 	if (token !== null) {
+	// 		Promise.all([checkToken(token), getLikedMovies()]).then(([userData, moviesData]) => {
+	// 			console.log(userData);
+	// 			console.log(moviesData);
+	// 		});
+	// 	}
+	// }, [isUserLoggedIn]);
+
+	function handleLoginUser(email, password) {
+		login(email, password)
+			.then((res) => {
+				localStorage.setItem('jwt', res.token);
+				Promise.all([getUserProfile(res.token), getLikedMovies(), getMovies()]).then(
+					([userData, likedMoviesData, allMoviesData]) => {
+						setCurrentUser(userData);
+						setLikedMovies(likedMoviesData);
+						setAllMovies(allMoviesData);
+						setIsUserLoggedIn(true);
+						history.push('/movies');
+					}
+				);
+			})
+			.then(() => {
+				// setIsUserLoggedIn(true);
+				console.log(isUserLoggedIn);
+			})
+			.catch((err) => {
+				setIsApiError(true);
+				setErrorData(err);
+				setIsErrorModalOpen(true);
+			});
+	}
+
+	// function handleLoginUser(email, password) {
+	// 	login(email, password)
+	// 		.then((res) => {
+	// 			setIsUserLoggedIn(true);
+	// 			setCurrentUser(res);
+	// 			history.push('/movies');
+	// 		})
+	// 		.catch((err) => {
+	// 			setIsApiError(true);
+	// 			setErrorData(err);
+	// 			setIsErrorModalOpen(true);
+	// 		});
+	// }
+
+	function handleRegisterNewUser(name, email, password) {
+		register(name, email, password)
+			.then(() => {
+				handleLoginUser(email, password);
+			})
+			.catch((err) => {
+				setIsApiError(true);
+				setErrorData(err);
+				setIsErrorModalOpen(true);
+			});
 	}
 
 	function handleLogoutUser() {
 		localStorage.removeItem('jwt');
 		localStorage.removeItem('previouslyFilterValue');
 		localStorage.removeItem('previouslySearchedMovies');
+		localStorage.removeItem('isShortMoviesPreviouslyChecked');
 		setIsUserLoggedIn(false);
 		history.push('/');
 	}
 
 	useEffect(() => {
-		const path = currentPath.pathname;
-		if (localStorage.getItem('jwt')) {
-			const token = localStorage.getItem('jwt');
-			checkToken(token).then((res) => {
-				setCurrentUser(res);
-				setIsUserLoggedIn(true);
-				history.push(path);
-			});
-		}
-	}, []);
-
-	useEffect(() => {
+		setIsLoading(true);
 		getMovies()
 			.then((movies) => {
 				setAllMovies(movies);
-				// setIsLoading(false);
 				setIsApiError(false);
 				if (filterValue) {
-					// setIsLoading(true);
 					const result = movies.filter((movie) => {
 						return movie.nameRU.toLowerCase().includes(filterValue.toLowerCase().trim());
 					});
@@ -99,16 +167,7 @@ function App() {
 			.finally(() => {
 				setIsLoading(false);
 			});
-	}, [filterValue, isShortMoviesChecked]);
-
-	useEffect(() => {
-		setIsLoading(true);
-		getLikedMovies()
-			.then((res) => setLikedMovies(res))
-			.finally(() => {
-				setIsLoading(false);
-			});
-	}, [currentUser]);
+	}, [filterValue, isShortMoviesChecked, currentUser]);
 
 	function handleCloseModal() {
 		setIsErrorModalOpen(false);
@@ -137,7 +196,7 @@ function App() {
 	}
 
 	function filterShortMovies(arr) {
-		if (isShortMoviesChecked) {
+		if (isShortMoviesChecked && arr.length !== 0) {
 			localStorage.setItem('isShortMoviesPreviouslyChecked', JSON.stringify(isShortMoviesChecked));
 		} else {
 			localStorage.setItem('isShortMoviesPreviouslyChecked', false);
@@ -194,15 +253,31 @@ function App() {
 			id,
 			nameRU,
 			nameEN
-		);
-		getLikedMovies().then((res) => setLikedMovies(res));
+		).catch((err) => {
+			setIsApiError(true);
+			setErrorData(err);
+			setIsErrorModalOpen(true);
+		});
+		getLikedMovies()
+			.then((res) => setLikedMovies(res))
+			.catch((err) => {
+				setIsApiError(true);
+				setErrorData(err);
+				setIsErrorModalOpen(true);
+			});
 	}
 
 	function deleteLikedMovie(_id, id) {
 		if (_id) {
-			deleteLikedMovieApi(_id).then((res) => {
-				setLikedMovies(likedMovies.filter((likedMovie) => likedMovie._id !== res._id));
-			});
+			deleteLikedMovieApi(_id)
+				.then((res) => {
+					setLikedMovies(likedMovies.filter((likedMovie) => likedMovie._id !== res._id));
+				})
+				.catch((err) => {
+					setIsApiError(true);
+					setErrorData(err);
+					setIsErrorModalOpen(true);
+				});
 		} else if (id) {
 			const selectedMovie = likedMovies.find((item) => item.movieId === id);
 			deleteLikedMovie(selectedMovie._id);
@@ -243,6 +318,10 @@ function App() {
 						component={SavedMovies}
 						films={filterShortLikedMovies(likedMovies)}
 						isLoading={isLoading}
+						isApiError={isApiError}
+						isErrorModalOpen={isErrorModalOpen}
+						errorData={errorData}
+						onCloseModal={handleCloseModal}
 						isUserLoggedIn={isUserLoggedIn}
 						onDeleteMovie={deleteLikedMovie}
 						onChangeFilterValue={handleChangeFilterValueLikedFilms}
@@ -263,12 +342,30 @@ function App() {
 						onLogout={handleLogoutUser}
 						isLoading={isLoading}
 					/>
-
+					{/* If token exist user aren't allowed to go to Register or Login */}
 					<Route exact path='/signup'>
-						<Register onRegister={handleRegisterNewUser} />
+						{!token ? (
+							<Register
+								onRegister={handleRegisterNewUser}
+								isErrorModalOpen={isErrorModalOpen}
+								errorData={errorData}
+								onCloseModal={handleCloseModal}
+							/>
+						) : (
+							<Redirect to='/' />
+						)}
 					</Route>
 					<Route exact path='/signin'>
-						<Login onLogin={handleLoginUser} />
+						{!token ? (
+							<Login
+								onLogin={handleLoginUser}
+								isErrorModalOpen={isErrorModalOpen}
+								errorData={errorData}
+								onCloseModal={handleCloseModal}
+							/>
+						) : (
+							<Redirect to='/' />
+						)}
 					</Route>
 					<Route exact path='*'>
 						<NotFound />
