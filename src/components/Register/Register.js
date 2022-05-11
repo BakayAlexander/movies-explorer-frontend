@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { REG_EXP_EMAIL, REG_EXP_NAME, REG_EXP_PASSWORD } from '../../utils/config';
+import ErrorModal from '../ErrorModal/ErrorModal';
 import Logo from '../Logo/Logo';
 import './Register.css';
 
-function Register({ onRegister }) {
+function Register({ onRegister, isErrorModalOpen, errorData, onCloseModal }) {
 	const [name, setName] = useState('');
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
@@ -71,8 +72,6 @@ function Register({ onRegister }) {
 		} else {
 			setErrorValidationPassword('');
 		}
-		console.log(password);
-		console.log(isPasswordValid);
 	}
 
 	useEffect(() => {
@@ -160,6 +159,7 @@ function Register({ onRegister }) {
 					</div>
 				</form>
 			</div>
+			<ErrorModal isOpen={isErrorModalOpen} onClose={onCloseModal} errorData={errorData} />
 		</section>
 	);
 }

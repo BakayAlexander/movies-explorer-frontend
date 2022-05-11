@@ -55,17 +55,28 @@ function MoviesCard({
 		onDeleteMovie(film._id, film.id);
 	}
 
+	function miutesToHours(time) {
+		if (time <= 60) {
+			return `${time}м`;
+		}
+		let mins = time % 60;
+		let hours = (time - mins) / 60;
+		return `${hours}ч ${mins}м`;
+	}
+
 	return (
 		<li className='movies-card' onMouseOver={showDeleteIcon} onMouseLeave={hideDeleteIcon}>
-			<img
-				className='movies-card__image'
-				src={isAllMovies ? MOVIES_URL + film.image.url : film.image}
-				alt={film.image.name}
-			/>
+			<a className='movies-card__trailer-link' href={film.trailerLink} target='_blank' rel='noreferrer'>
+				<img
+					className='movies-card__image'
+					src={isAllMovies ? MOVIES_URL + film.image.url : film.image}
+					alt={film.image.name}
+				/>
+			</a>
 			<div className='movies-card__description'>
 				<div className='movies-card__text-container'>
 					<h3 className='movies-card__title'>{film.nameRU || film.nameEN}</h3>
-					<p className='movies-card__duration'>{film.duration}м</p>
+					<p className='movies-card__duration'>{miutesToHours(film.duration)}</p>
 				</div>
 				<button
 					className={

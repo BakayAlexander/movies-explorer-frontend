@@ -17,8 +17,13 @@ function MoviesCardList({
 	const [counterAddMovies, setCounterAddMovies] = useState(0);
 	const [renderingMovies, setRenderingMovies] = useState([]);
 
+	// *If films length becomes more than 0 (searching starts) we changing rendered films
 	useEffect(() => {
-		setRenderingMovies(films);
+		if (films.length !== 0 && isAllMovies) {
+			setRenderingMovies(films);
+		} else if (isSavedMovies) {
+			setRenderingMovies(films);
+		}
 	}, [films]);
 
 	let display = window.screen.width;
@@ -54,6 +59,7 @@ function MoviesCardList({
 
 	function handleClickShowAllMovies() {
 		setRenderingMovies(allMovies);
+		localStorage.setItem('previouslySearchedMovies', JSON.stringify(allMovies));
 	}
 
 	return (

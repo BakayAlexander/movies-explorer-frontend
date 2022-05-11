@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { REG_EXP_EMAIL } from '../../utils/config';
+import ErrorModal from '../ErrorModal/ErrorModal';
 import Logo from '../Logo/Logo';
 import './Login.css';
 
-export default function Login({ onLogin }) {
+export default function Login({ onLogin, isErrorModalOpen, errorData, onCloseModal }) {
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const [isEmailValid, setIsEmailValid] = useState(true);
@@ -80,8 +81,8 @@ export default function Login({ onLogin }) {
 						<input
 							className='login__form-input'
 							id='password-input'
-							type='new-password'
-							autoComplete='current-password'
+							type='password'
+							autoComplete='password'
 							placeholder='Введите пожалуйста ваш пароль'
 							value={password ?? ''}
 							onChange={handleChangePassword}
@@ -103,6 +104,7 @@ export default function Login({ onLogin }) {
 					</div>
 				</form>
 			</div>
+			<ErrorModal isOpen={isErrorModalOpen} onClose={onCloseModal} errorData={errorData} />
 		</section>
 	);
 }

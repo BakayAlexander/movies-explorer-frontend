@@ -1,4 +1,5 @@
 import React from 'react';
+import ErrorModal from '../ErrorModal/ErrorModal';
 import Footer from '../Footer/Footer';
 import Header from '../Header/Header';
 import MoviesCardList from '../MoviesCardList/MoviesCardList';
@@ -14,6 +15,10 @@ function SavedMovies({
 	onChangeFilterValue,
 	onChangeShortMoviesCheckbox,
 	isShortMoviesChecked,
+	isApiError,
+	isErrorModalOpen,
+	errorData,
+	onCloseModal,
 }) {
 	return (
 		<>
@@ -37,6 +42,7 @@ function SavedMovies({
 					/>
 				)}
 			</section>
+			<ErrorModal isOpen={isErrorModalOpen} onClose={onCloseModal} errorData={errorData} />
 			<Footer />
 		</>
 	);

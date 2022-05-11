@@ -3,9 +3,18 @@ import './ErrorModal.css';
 
 function ErrorModal({ isOpen, onClose, errorData }) {
 	let errorName = '';
-
-	if (errorData === 404) {
+	if (errorData === 400) {
+		errorName = 'Ошибка валидации данных';
+	} else if (errorData === 401) {
+		errorName = 'Ошибка авторизации.';
+	} else if (errorData === 403) {
+		errorData = 'Доступ запрещен.';
+	} else if (errorData === 404) {
 		errorName = 'Страница не найдена.';
+	} else if (errorData === 409) {
+		errorName = 'Объект с указанными данными уже существует.';
+	} else if (errorData === 500) {
+		errorName = 'Сервер недоступен. Попробуйте позже.';
 	}
 
 	React.useEffect(() => {

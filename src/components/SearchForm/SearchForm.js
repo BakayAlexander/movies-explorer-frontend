@@ -4,13 +4,20 @@ import './SearchForm.css';
 
 function SearchForm({ onChangeFilterValue, onChangeShortMoviesCheckbox, isShortMoviesChecked, previouslyFilterValue }) {
 	const [movie, setMovie] = useState(previouslyFilterValue || '');
+	const [errorValidationMovie, setErorValidationMovie] = useState('');
 
 	function handleChangeMovie(e) {
 		setMovie(e.target.value);
+		if (e.target.value.length !== 0) {
+			setErorValidationMovie('');
+		}
 	}
 
 	function handleFindMovies(e) {
 		e.preventDefault();
+		if (movie.length === 0 || movie.trim().length === 0) {
+			return setErorValidationMovie('Нужно ввести ключевое слово');
+		}
 		onChangeFilterValue(movie);
 	}
 
@@ -24,11 +31,17 @@ function SearchForm({ onChangeFilterValue, onChangeShortMoviesCheckbox, isShortM
 					name='movie'
 					value={movie ?? ''}
 					onChange={handleChangeMovie}
-					required
 					placeholder='Название фильма'
 				/>
+
 				<button className='search__form-button'></button>
 			</form>
+			{errorValidationMovie && (
+				<span className='search__form-error' id='name-input-error'>
+					{errorValidationMovie}
+				</span>
+			)}
+
 			<FilterCheckbox
 				onChangeShortMoviesCheckbox={onChangeShortMoviesCheckbox}
 				isShortMoviesChecked={isShortMoviesChecked}

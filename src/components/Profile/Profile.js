@@ -43,7 +43,7 @@ function Profile({
 	function validateName(name) {
 		if (currentUser.name === name) {
 			setIsNameValid(false);
-			return setErrorValidationName('Введите другое имя');
+			return setErrorValidationName('');
 		}
 		if (isNameValid) {
 			if (name.length < 2) {
@@ -64,7 +64,7 @@ function Profile({
 	function validateEmail(email) {
 		if (currentUser.email === email) {
 			setIsEmailValid(false);
-			return setErrorValidationEmail('Введите другой email');
+			return setErrorValidationEmail('');
 		}
 		if (!isEmailValid) {
 			setIsEmailValid(false);
@@ -134,11 +134,7 @@ function Profile({
 							</span>
 						)}
 					</label>
-					<button
-						className='profile__form-submit-button'
-						type='submit'
-						disabled={!(isNameValid && isEmailValid && (currentUser.name !== name || currentUser.email !== email))}
-					>
+					<button className='profile__form-submit-button' type='submit' disabled={!(isNameValid || isEmailValid)}>
 						Сохранить
 					</button>
 				</form>
