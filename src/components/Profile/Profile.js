@@ -5,7 +5,6 @@ import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import Popup from '../Popup/Popup';
 import { REG_EXP_EMAIL, REG_EXP_NAME } from '../../utils/config';
 import ErrorModal from '../ErrorModal/ErrorModal';
-import Preloader from '../Preloader/Preloader';
 
 function Profile({
 	isUserLoggedIn,
@@ -25,6 +24,7 @@ function Profile({
 	const [errorValidationName, setErrorValidationName] = useState('');
 	const [errorValidationEmail, setErrorValidationEmail] = useState('');
 
+	// * Get current user data to states
 	useEffect(() => {
 		setName(currentUser.name);
 		setEmail(currentUser.email);
@@ -74,6 +74,7 @@ function Profile({
 		}
 	}
 
+	// * Validating name and email if inputs changed
 	useEffect(() => {
 		validateName(name);
 		validateEmail(email);

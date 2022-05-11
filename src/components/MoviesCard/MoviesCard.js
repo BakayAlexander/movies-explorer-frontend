@@ -7,15 +7,7 @@ import {
 } from '../../utils/config';
 import './MoviesCard.css';
 
-function MoviesCard({
-	film,
-	isAllMovies,
-	isSavedMovies,
-	handleSaveLikedMovie,
-	onDeleteMovie,
-	handleIsLike,
-	likedMovies,
-}) {
+function MoviesCard({ film, isAllMovies, isSavedMovies, handleSaveLikedMovie, onDeleteMovie, likedMovies }) {
 	const isMobile = window.screen.width <= 1024;
 
 	function showDeleteIcon(e) {
@@ -110,4 +102,4 @@ function MoviesCard({
 	);
 }
 
-export default React.memo(MoviesCard);
+export default MoviesCard;

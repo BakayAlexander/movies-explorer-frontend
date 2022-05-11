@@ -13,14 +13,14 @@ function Popup({ isOpen, onClose, children }) {
 		return () => document.removeEventListener('keydown', closeByEscape);
 	}, [isOpen, onClose]);
 
-	function handleOverlay(e) {
+	function handleClickOverlay(e) {
 		if (e.target === e.currentTarget) {
 			onClose();
 		}
 	}
 
 	return (
-		<div onClick={handleOverlay} className={`popup ${isOpen ? 'popup_is-opened' : ''}`}>
+		<div onClick={handleClickOverlay} className={`popup ${isOpen ? 'popup_is-opened' : ''}`}>
 			<div className='popup__container'>
 				{children} <button className='popup__button-close' type='button' onClick={onClose}></button>
 			</div>

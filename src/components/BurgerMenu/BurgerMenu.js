@@ -3,14 +3,14 @@ import { NavLink } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import './BurgerMenu.css';
 
-function BurgerMenu({ isOpen, onClose, ...props }) {
-	function handleOverlay(e) {
+function BurgerMenu({ isOpen, onClose }) {
+	function handleClickOverlay(e) {
 		if (e.target === e.currentTarget) {
 			onClose();
 		}
 	}
 	return (
-		<div className={`burger-menu ${isOpen ? `burger-menu_is-opened` : ``}`} onClick={handleOverlay}>
+		<div className={`burger-menu ${isOpen ? `burger-menu_is-opened` : ``}`} onClick={handleClickOverlay}>
 			<div className='burger-menu__container'>
 				<button className='burger-menu__close-button' onClick={onClose} />
 				<nav className='burger-menu__navigation'>

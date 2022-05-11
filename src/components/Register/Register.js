@@ -74,6 +74,8 @@ function Register({ onRegister, isErrorModalOpen, errorData, onCloseModal }) {
 		}
 	}
 
+	// * Validating name, password and email if inputs changed
+
 	useEffect(() => {
 		validateName(name);
 		validateEmail(email);

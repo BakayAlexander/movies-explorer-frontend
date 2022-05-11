@@ -89,13 +89,14 @@ function MoviesCardList({
 									isSavedMovies={isSavedMovies}
 									handleSaveLikedMovie={handleSaveLikedMovie}
 									onDeleteMovie={onDeleteMovie}
-									handleIsLike={handleIsLike}
 									likedMovies={likedMovies}
 								/>
 						  ))}
 				</ul>
 			) : (
-				<p className='movies-list__no-films-searched'>Мы ничего не нашли по вашему запросу.</p>
+				<p className='movies-list__no-films-searched'>
+					{isAllMovies ? 'Мы ничего не нашли по вашему запросу.' : 'Сохраненные фильмы не найдены'}
+				</p>
 			)}
 			{isMoreButton && renderingMovies.length > moviesNumber && (
 				<button
@@ -121,4 +122,4 @@ function MoviesCardList({
 	);
 }
 
-export default React.memo(MoviesCardList);
+export default MoviesCardList;

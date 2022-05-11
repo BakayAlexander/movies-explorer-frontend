@@ -82,7 +82,7 @@
 .profile__input-span-error {
 	margin-top: 20px;
 	font-size: 12px;
-	color: rgb(165, 0, 0);
+	color: #ee3465;
 }
 
 .profile__form-submit-button {

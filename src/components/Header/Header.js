@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import BurgerMenu from '../BurgerMenu/BurgerMenu';
 import { NavLink } from 'react-router-dom';
 
-function Header({ isUserLoggedIn, ...props }) {
+function Header({ isUserLoggedIn }) {
 	const [isBurgerMenuOpen, setIsBurgerMenuOpen] = useState(false);
 
 	function handleToogleBurgerMenu() {

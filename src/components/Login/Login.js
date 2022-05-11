@@ -43,6 +43,8 @@ export default function Login({ onLogin, isErrorModalOpen, errorData, onCloseMod
 		}
 	}
 
+	// * Validating password and email if inputs changed
+
 	useEffect(() => {
 		validateEmail(email);
 		validatePassword(password);

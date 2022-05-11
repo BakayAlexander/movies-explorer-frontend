@@ -28,14 +28,14 @@ function ErrorModal({ isOpen, onClose, errorData }) {
 		return () => document.removeEventListener('keydown', closeByEscape);
 	}, [isOpen, onClose]);
 
-	function handleOverlay(e) {
+	function handleClickOverlay(e) {
 		if (e.target === e.currentTarget) {
 			onClose();
 		}
 	}
 
 	return (
-		<div className={`error-modal ${isOpen ? 'error-modal_is-opened' : ''}`} onClick={handleOverlay}>
+		<div className={`error-modal ${isOpen ? 'error-modal_is-opened' : ''}`} onClick={handleClickOverlay}>
 			<div className='error-modal__container'>
 				<button className='error-modal__close-button' onClick={onClose} />
 				<h1 className='error-modal__status'>{errorData}</h1>

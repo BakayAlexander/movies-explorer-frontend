@@ -21,7 +21,6 @@ function Movies({
 	isUserLoggedIn,
 	handleSaveLikedMovie,
 	onDeleteMovie,
-	handleIsLike,
 	likedMovies,
 	previouslyFilterValue,
 }) {
@@ -47,7 +46,6 @@ function Movies({
 						allMovies={allMovies}
 						handleSaveLikedMovie={handleSaveLikedMovie}
 						onDeleteMovie={onDeleteMovie}
-						handleIsLike={handleIsLike}
 					/>
 				) : (
 					<h2 className='movies__api-error'>
@@ -62,4 +60,4 @@ function Movies({
 	);
 }
 
-export default Movies;
+export default React.memo(Movies);
