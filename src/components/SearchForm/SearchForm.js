@@ -2,7 +2,13 @@ import React, { useState } from 'react';
 import FilterCheckbox from '../FilterCheckbox/FilterCheckbox';
 import './SearchForm.css';
 
-function SearchForm({ onChangeFilterValue, onChangeShortMoviesCheckbox, isShortMoviesChecked, previouslyFilterValue }) {
+function SearchForm({
+	onChangeFilterValue,
+	onChangeShortMoviesCheckbox,
+	isShortMoviesChecked,
+	previouslyFilterValue,
+	isDisabledButton,
+}) {
 	const [movie, setMovie] = useState(previouslyFilterValue || '');
 	const [errorValidationMovie, setErorValidationMovie] = useState('');
 
@@ -14,11 +20,13 @@ function SearchForm({ onChangeFilterValue, onChangeShortMoviesCheckbox, isShortM
 	}
 
 	function handleFindMovies(e) {
-		e.preventDefault();
-		if (movie.length === 0 || movie.trim().length === 0) {
-			return setErorValidationMovie('Нужно ввести ключевое слово');
+		if (!isDisabledButton) {
+			e.preventDefault();
+			if (movie.length === 0 || movie.trim().length === 0) {
+				return setErorValidationMovie('Нужно ввести ключевое слово');
+			}
+			onChangeFilterValue(movie);
 		}
-		onChangeFilterValue(movie);
 	}
 
 	return (
@@ -34,7 +42,7 @@ function SearchForm({ onChangeFilterValue, onChangeShortMoviesCheckbox, isShortM
 					placeholder='Название фильма'
 				/>
 
-				<button className='search__form-button'></button>
+				<button className='search__form-button' disabled={isDisabledButton}></button>
 			</form>
 			{errorValidationMovie && (
 				<span className='search__form-error' id='name-input-error'>

@@ -12,6 +12,7 @@ function MoviesCardList({
 	onDeleteMovie,
 	handleIsLike,
 	likedMovies,
+	isDisabledButton,
 }) {
 	const [moviesNumber, setMoviesNumber] = useState(0);
 	const [counterAddMovies, setCounterAddMovies] = useState(0);
@@ -79,6 +80,7 @@ function MoviesCardList({
 										onDeleteMovie={onDeleteMovie}
 										handleIsLike={handleIsLike}
 										likedMovies={likedMovies}
+										isDisabledButton={isDisabledButton}
 									/>
 								))
 						: renderingMovies.map((film) => (
@@ -90,6 +92,7 @@ function MoviesCardList({
 									handleSaveLikedMovie={handleSaveLikedMovie}
 									onDeleteMovie={onDeleteMovie}
 									likedMovies={likedMovies}
+									isDisabledButton={isDisabledButton}
 								/>
 						  ))}
 				</ul>

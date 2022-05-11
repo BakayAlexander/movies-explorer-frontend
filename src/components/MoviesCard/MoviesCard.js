@@ -7,7 +7,15 @@ import {
 } from '../../utils/config';
 import './MoviesCard.css';
 
-function MoviesCard({ film, isAllMovies, isSavedMovies, handleSaveLikedMovie, onDeleteMovie, likedMovies }) {
+function MoviesCard({
+	film,
+	isAllMovies,
+	isSavedMovies,
+	handleSaveLikedMovie,
+	onDeleteMovie,
+	likedMovies,
+	isDisabledButton,
+}) {
 	const isMobile = window.screen.width <= 1024;
 
 	function showDeleteIcon(e) {
@@ -88,6 +96,7 @@ function MoviesCard({ film, isAllMovies, isSavedMovies, handleSaveLikedMovie, on
 					type='button'
 					aria-label='Отметить понравимшимся'
 					onClick={handleLikeClick}
+					disabled={isDisabledButton}
 				></button>
 				<button
 					className={` ${isSavedMovies ? 'movies-card__delete-button' : 'movies-card__delete-button_disable'} ${
@@ -96,6 +105,7 @@ function MoviesCard({ film, isAllMovies, isSavedMovies, handleSaveLikedMovie, on
 					type='button'
 					aria-label='Удалить карточку'
 					onClick={hadleClickDeleteButton}
+					disabled={isDisabledButton}
 				></button>
 			</div>
 		</li>

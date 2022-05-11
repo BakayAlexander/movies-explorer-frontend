@@ -19,6 +19,7 @@ function SavedMovies({
 	isErrorModalOpen,
 	errorData,
 	onCloseModal,
+	isDisabledButton,
 }) {
 	return (
 		<>
@@ -28,6 +29,7 @@ function SavedMovies({
 					onChangeFilterValue={onChangeFilterValue}
 					onChangeShortMoviesCheckbox={onChangeShortMoviesCheckbox}
 					isShortMoviesChecked={isShortMoviesChecked}
+					isDisabledButton={isDisabledButton}
 				/>
 				{isLoading ? (
 					<Preloader />
@@ -39,6 +41,7 @@ function SavedMovies({
 						isSavedMovies={true}
 						onDeleteMovie={onDeleteMovie}
 						handleIsLike={handleIsLike}
+						isDisabledButton={isDisabledButton}
 					/>
 				) : (
 					<h2 className='movies__api-error'>

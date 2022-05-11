@@ -41,6 +41,7 @@ function App() {
 	const [isShortLikedMoviesChecked, setIsShortLikedMoviesChecked] = useState(false);
 	const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
 	const [isUpdateUserPopupOpen, setIsUpdateUserPopupOpen] = useState(false);
+	const [isDisabledButton, setIsDisabledButton] = useState(false);
 
 	// * User has token? Get user data
 	useEffect(() => {
@@ -117,9 +118,10 @@ function App() {
 
 	// * Get all movies from api, than comare with filter value and return filtred array
 	useEffect(() => {
-		setIsLoading(true);
 		getMovies()
 			.then((movies) => {
+				setIsLoading(true);
+				setIsDisabledButton(true);
 				setAllMovies(movies);
 				setIsApiError(false);
 				if (filterValue) {
@@ -137,6 +139,7 @@ function App() {
 				setIsErrorModalOpen(true);
 			})
 			.finally(() => {
+				setIsDisabledButton(false);
 				setIsLoading(false);
 			});
 	}, [filterValue, isShortMoviesChecked, currentUser]);
@@ -216,25 +219,14 @@ function App() {
 		nameRU,
 		nameEN
 	) {
-		saveLikedMovieApi(
-			country,
-			director,
-			duration,
-			year,
-			description,
-			image,
-			trailerLink,
-			thumbnail,
-			id,
-			nameRU,
-			nameEN
-		).catch((err) => {
-			setIsApiError(true);
-			setErrorData(err);
-			setIsErrorModalOpen(true);
-		});
-		getLikedMovies()
-			.then((res) => setLikedMovies(res))
+		setIsDisabledButton(true);
+		saveLikedMovieApi(country, director, duration, year, description, image, trailerLink, thumbnail, id, nameRU, nameEN)
+			.then(() => {
+				getLikedMovies().then((res) => {
+					setLikedMovies(res);
+				});
+				setIsDisabledButton(false);
+			})
 			.catch((err) => {
 				setIsApiError(true);
 				setErrorData(err);
@@ -244,10 +236,12 @@ function App() {
 
 	// * Depending of where we now (Movies or SavedMovies) we transfer an id or an _id. And then deleting movie from MainApi and filtering array of likedMovies.
 	function deleteLikedMovie(_id, id) {
+		setIsDisabledButton(true);
 		if (_id) {
 			deleteLikedMovieApi(_id)
 				.then((res) => {
 					setLikedMovies(likedMovies.filter((likedMovie) => likedMovie._id !== res._id));
+					setIsDisabledButton(false);
 				})
 				.catch((err) => {
 					setIsApiError(true);
@@ -255,8 +249,16 @@ function App() {
 					setIsErrorModalOpen(true);
 				});
 		} else if (id) {
+			setIsDisabledButton(true);
 			const selectedMovie = likedMovies.find((item) => item.movieId === id);
-			deleteLikedMovie(selectedMovie._id);
+			setLikedMovies(likedMovies.filter((item) => item.movieId !== id));
+			if (selectedMovie) {
+				deleteLikedMovieApi(selectedMovie._id).finally(() => {
+					setIsDisabledButton(false);
+				});
+			} else {
+				setTimeout(setIsDisabledButton(false), 1000);
+			}
 		}
 	}
 
@@ -286,6 +288,7 @@ function App() {
 						handleSaveLikedMovie={handleSaveLikedMovie}
 						onDeleteMovie={deleteLikedMovie}
 						previouslyFilterValue={previouslyFilterValue}
+						isDisabledButton={isDisabledButton}
 					/>
 
 					<ProtectedRoute
@@ -303,6 +306,7 @@ function App() {
 						onChangeFilterValue={handleChangeFilterValueLikedFilms}
 						onChangeShortMoviesCheckbox={handleChangeShortMoviesCheckboxLikedFilms}
 						isShortMoviesChecked={isShortLikedMoviesChecked}
+						isDisabledButton={isDisabledButton}
 					/>
 					<ProtectedRoute
 						exact

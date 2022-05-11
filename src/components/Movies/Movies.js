@@ -23,6 +23,7 @@ function Movies({
 	onDeleteMovie,
 	likedMovies,
 	previouslyFilterValue,
+	isDisabledButton,
 }) {
 	return (
 		<>
@@ -33,6 +34,7 @@ function Movies({
 					onChangeShortMoviesCheckbox={onChangeShortMoviesCheckbox}
 					isShortMoviesChecked={isShortMoviesChecked}
 					previouslyFilterValue={previouslyFilterValue}
+					isDisabledButton={isDisabledButton}
 				/>
 				{isLoading ? (
 					<Preloader />
@@ -46,6 +48,7 @@ function Movies({
 						allMovies={allMovies}
 						handleSaveLikedMovie={handleSaveLikedMovie}
 						onDeleteMovie={onDeleteMovie}
+						isDisabledButton={isDisabledButton}
 					/>
 				) : (
 					<h2 className='movies__api-error'>
