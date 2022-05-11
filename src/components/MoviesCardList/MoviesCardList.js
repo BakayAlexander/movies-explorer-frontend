@@ -121,4 +121,4 @@ function MoviesCardList({
 	);
 }
 
-export default MoviesCardList;
+export default React.memo(MoviesCardList);

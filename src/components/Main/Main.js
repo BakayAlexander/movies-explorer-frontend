@@ -21,4 +21,4 @@ function Main({ isUserLoggedIn }) {
 	);
 }
 
-export default Main;
+export default React.memo(Main);

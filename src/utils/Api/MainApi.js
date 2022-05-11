@@ -25,14 +25,6 @@ export const getUserProfile = (token) => {
 	}).then(prepareDate);
 };
 
-// export const updateUserProfile = (email, name) => {
-// 	return fetch(`${BASE_URL}/users/me`, {
-// 		method: 'PATCH',
-// 		headers: headers,
-// 		body: JSON.stringify({ name: name, email: email }),
-// 	}).then(prepareDate);
-// };
-
 export const updateUserProfile = (email, name) => {
 	return fetch(`${BASE_URL}/users/me`, {
 		method: 'PATCH',
@@ -45,13 +37,6 @@ export const updateUserProfile = (email, name) => {
 	}).then(prepareDate);
 };
 
-// export const getLikedMovies = () => {
-// 	return fetch(`${BASE_URL}/movies`, {
-// 		method: 'GET',
-// 		headers: headers,
-// 	}).then(prepareDate);
-// };
-
 export const getLikedMovies = () => {
 	return fetch(`${BASE_URL}/movies`, {
 		method: 'GET',
@@ -62,50 +47,6 @@ export const getLikedMovies = () => {
 		},
 	}).then(prepareDate);
 };
-
-// !!!!!!!!!!!!!!!!!!!
-export const getLikedMoviesTest = (token) => {
-	return fetch(`${BASE_URL}/movies`, {
-		method: 'GET',
-		headers: {
-			Authorization: `Bearer ${token}`,
-			'Content-Type': 'application/json',
-			Accept: 'application/json',
-		},
-	}).then(prepareDate);
-};
-
-// export const saveLikedMovieApi = (
-// 	country,
-// 	director,
-// 	duration,
-// 	year,
-// 	description,
-// 	image,
-// 	trailerLink,
-// 	thumbnail,
-// 	movieId,
-// 	nameRU,
-// 	nameEN
-// ) => {
-// 	return fetch(`${BASE_URL}/movies`, {
-// 		method: 'POST',
-// 		headers: headers,
-// 		body: JSON.stringify({
-// 			country,
-// 			director,
-// 			duration,
-// 			year,
-// 			description,
-// 			image,
-// 			trailerLink,
-// 			thumbnail,
-// 			movieId,
-// 			nameRU,
-// 			nameEN,
-// 		}),
-// 	}).then(prepareDate);
-// };
 
 export const saveLikedMovieApi = (
 	country,
@@ -142,13 +83,6 @@ export const saveLikedMovieApi = (
 		}),
 	}).then(prepareDate);
 };
-
-// export const deleteLikedMovieApi = (id) => {
-// 	return fetch(`${BASE_URL}/movies/${id}`, {
-// 		method: 'DELETE',
-// 		headers: headers,
-// 	}).then(prepareDate);
-// };
 
 export const deleteLikedMovieApi = (id) => {
 	return fetch(`${BASE_URL}/movies/${id}`, {

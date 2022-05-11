@@ -1,5 +1,10 @@
 import React from 'react';
-import { DEFAULT_DATA_NOT_AVAILABLE, DEFAULT_URL_NOT_AVAILABLE, MOVIES_URL } from '../../utils/config';
+import {
+	DEFAULT_DATA_NOT_AVAILABLE,
+	DEFAULT_TRAILER_NOT_AVAILABLE,
+	DEFAULT_URL_NOT_AVAILABLE,
+	MOVIES_URL,
+} from '../../utils/config';
 import './MoviesCard.css';
 
 function MoviesCard({
@@ -38,7 +43,7 @@ function MoviesCard({
 				film.year || DEFAULT_DATA_NOT_AVAILABLE,
 				film.description || DEFAULT_DATA_NOT_AVAILABLE,
 				MOVIES_URL + film.image.url || DEFAULT_URL_NOT_AVAILABLE,
-				film.trailerLink || DEFAULT_URL_NOT_AVAILABLE,
+				film.trailerLink || DEFAULT_TRAILER_NOT_AVAILABLE,
 				MOVIES_URL + film.image.formats.thumbnail.url || DEFAULT_URL_NOT_AVAILABLE,
 				film.id,
 				film.nameRU || DEFAULT_DATA_NOT_AVAILABLE,
@@ -105,4 +110,4 @@ function MoviesCard({
 	);
 }
 
-export default MoviesCard;
+export default React.memo(MoviesCard);
