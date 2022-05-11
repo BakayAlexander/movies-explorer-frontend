@@ -28,23 +28,22 @@ function App() {
 	const previouslyFilterValue = JSON.parse(localStorage.getItem('previouslyFilterValue'));
 	const previouslySearchedMovies = JSON.parse(localStorage.getItem('previouslySearchedMovies'));
 	const isShortMoviesPreviouslyChecked = JSON.parse(localStorage.getItem('isShortMoviesPreviouslyChecked'));
-	let token = localStorage.getItem('jwt');
 	const [currentUser, setCurrentUser] = useState({});
 	const [allMovies, setAllMovies] = useState([]);
+	const [likedMovies, setLikedMovies] = useState([]);
+	const [filtredMovies, setFiltredMovies] = useState(previouslySearchedMovies || []);
 	const [isApiError, setIsApiError] = useState(false);
 	const [errorData, setErrorData] = useState('');
 	const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
-	const [likedMovies, setLikedMovies] = useState([]);
 	const [isLoading, setIsLoading] = useState(true);
 	const [filterValue, setFilterValue] = useState('');
 	const [isShortMoviesChecked, setIsShortMoviesChecked] = useState(isShortMoviesPreviouslyChecked || false);
 	const [isShortLikedMoviesChecked, setIsShortLikedMoviesChecked] = useState(false);
-	const [filtredMovies, setFiltredMovies] = useState(previouslySearchedMovies || []);
 	const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
 	const [isUpdateUserPopupOpen, setIsUpdateUserPopupOpen] = useState(false);
 
+	// * User has token? Get user data
 	useEffect(() => {
-		// console.log('отработала проверка токена');
 		const path = currentPath.pathname;
 		if (localStorage.getItem('jwt')) {
 			const token = localStorage.getItem('jwt');
@@ -60,11 +59,11 @@ function App() {
 		}
 	}, []);
 
+	// * Get liked movies from MainApi
 	useEffect(() => {
 		setIsLoading(true);
 		getLikedMovies()
 			.then((res) => {
-				// console.log('запросили с сервера сохраненные');
 				setLikedMovies(res);
 			})
 			.finally(() => {
@@ -72,18 +71,7 @@ function App() {
 			});
 	}, []);
 
-	// console.log(isUserLoggedIn);
-
-	// useEffect(() => {
-	// 	const token = localStorage.getItem('jwt');
-	// 	if (token !== null) {
-	// 		Promise.all([checkToken(token), getLikedMovies()]).then(([userData, moviesData]) => {
-	// 			console.log(userData);
-	// 			console.log(moviesData);
-	// 		});
-	// 	}
-	// }, [isUserLoggedIn]);
-
+	// * When user login, we get user data, all movies and liked movies.
 	function handleLoginUser(email, password) {
 		login(email, password)
 			.then((res) => {
@@ -98,10 +86,6 @@ function App() {
 					}
 				);
 			})
-			.then(() => {
-				// setIsUserLoggedIn(true);
-				console.log(isUserLoggedIn);
-			})
 			.catch((err) => {
 				setIsApiError(true);
 				setErrorData(err);
@@ -109,20 +93,7 @@ function App() {
 			});
 	}
 
-	// function handleLoginUser(email, password) {
-	// 	login(email, password)
-	// 		.then((res) => {
-	// 			setIsUserLoggedIn(true);
-	// 			setCurrentUser(res);
-	// 			history.push('/movies');
-	// 		})
-	// 		.catch((err) => {
-	// 			setIsApiError(true);
-	// 			setErrorData(err);
-	// 			setIsErrorModalOpen(true);
-	// 		});
-	// }
-
+	// * After register we permanently login
 	function handleRegisterNewUser(name, email, password) {
 		register(name, email, password)
 			.then(() => {
@@ -144,6 +115,7 @@ function App() {
 		history.push('/');
 	}
 
+	// * Get all movies from api, than comare with filter value and return filtred array
 	useEffect(() => {
 		setIsLoading(true);
 		getMovies()
@@ -178,6 +150,7 @@ function App() {
 		setFilterValue(searchInputValue);
 	}
 
+	// * Filter of liked movies
 	function handleChangeFilterValueLikedFilms(searchInputValue) {
 		if (searchInputValue) {
 			const result = likedMovies.filter((movies) => {
@@ -195,6 +168,7 @@ function App() {
 		setIsShortLikedMoviesChecked(!isShortLikedMoviesChecked);
 	}
 
+	// *Looking if "Short movies" checkbox checked and depending of it return filtred or unfiltered array. Than we use this functions to filter movies at Movies and SavedMovies while adding a props.
 	function filterShortMovies(arr) {
 		if (isShortMoviesChecked && arr.length !== 0) {
 			localStorage.setItem('isShortMoviesPreviouslyChecked', JSON.stringify(isShortMoviesChecked));
@@ -228,6 +202,7 @@ function App() {
 			});
 	}
 
+	// * When like is added we send request to MainApi, and after that refreshing liked movies
 	function handleSaveLikedMovie(
 		country,
 		director,
@@ -267,6 +242,7 @@ function App() {
 			});
 	}
 
+	// * Depending of where we now (Movies or SavedMovies) we transfer an id or an _id. And then deleting movie from MainApi and filtering array of likedMovies.
 	function deleteLikedMovie(_id, id) {
 		if (_id) {
 			deleteLikedMovieApi(_id)
@@ -344,7 +320,7 @@ function App() {
 					/>
 					{/* If token exist user aren't allowed to go to Register or Login */}
 					<Route exact path='/signup'>
-						{!token ? (
+						{!localStorage.getItem('jwt') ? (
 							<Register
 								onRegister={handleRegisterNewUser}
 								isErrorModalOpen={isErrorModalOpen}
@@ -356,7 +332,7 @@ function App() {
 						)}
 					</Route>
 					<Route exact path='/signin'>
-						{!token ? (
+						{!localStorage.getItem('jwt') ? (
 							<Login
 								onLogin={handleLoginUser}
 								isErrorModalOpen={isErrorModalOpen}
