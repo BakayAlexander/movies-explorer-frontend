@@ -318,9 +318,9 @@ function App() {
 						onLogout={handleLogoutUser}
 						isLoading={isLoading}
 					/>
-					{/* If token exist user aren't allowed to go to Register or Login */}
+					{/* If user loggedin exist user aren't allowed to go to Register or Login */}
 					<Route exact path='/signup'>
-						{!localStorage.getItem('jwt') ? (
+						{!isUserLoggedIn ? (
 							<Register
 								onRegister={handleRegisterNewUser}
 								isErrorModalOpen={isErrorModalOpen}
@@ -332,7 +332,7 @@ function App() {
 						)}
 					</Route>
 					<Route exact path='/signin'>
-						{!localStorage.getItem('jwt') ? (
+						{!isUserLoggedIn ? (
 							<Login
 								onLogin={handleLoginUser}
 								isErrorModalOpen={isErrorModalOpen}

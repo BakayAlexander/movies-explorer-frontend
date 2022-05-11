@@ -1,6 +1,6 @@
 export const MOVIES_URL = 'https://api.nomoreparties.co';
-export const BASE_URL = 'http://localhost:3001/api';
-// export const BASE_URL = 'https://api.bakay.nomoredomains.work/api';
+// export const BASE_URL = 'http://localhost:3001/api';
+export const BASE_URL = 'https://api.bakay.nomoredomains.work/api';
 export const SHORT_MOVIE_DURATION = 40;
 export const DEFAULT_URL_NOT_AVAILABLE = 'https://upload.wikimedia.org/wikipedia/commons/d/d1/Image_not_available.png';
 export const DEFAULT_TRAILER_NOT_AVAILABLE = 'https://www.youtube.com/';
