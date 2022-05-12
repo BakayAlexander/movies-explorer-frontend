@@ -239,9 +239,8 @@ function App() {
 		if (_id) {
 			deleteLikedMovieApi(_id)
 				.then((res) => {
-					const filtred = likedMovies.filter((likedMovie) => likedMovie._id !== res._id);
-					setLikedMovies(filtred);
-					setFiltredLikedMovies(filtred);
+					setLikedMovies(likedMovies.filter((likedMovie) => likedMovie._id !== res._id));
+					setFiltredLikedMovies(filtredLikedMovies.filter((likedMovie) => likedMovie._id !== res._id));
 					setIsDisabledButton(false);
 				})
 				.catch((err) => {
@@ -253,7 +252,7 @@ function App() {
 			setIsDisabledButton(true);
 			const selectedMovie = likedMovies.find((item) => item.movieId === id);
 			setLikedMovies(likedMovies.filter((item) => item.movieId !== id));
-			setFiltredLikedMovies(likedMovies.filter((item) => item.movieId !== id));
+			setFiltredLikedMovies(filtredLikedMovies.filter((item) => item.movieId !== id));
 			if (selectedMovie) {
 				deleteLikedMovieApi(selectedMovie._id).finally(() => {
 					setIsDisabledButton(false);
