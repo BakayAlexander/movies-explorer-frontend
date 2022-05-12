@@ -32,11 +32,13 @@ function App() {
 	const [allMovies, setAllMovies] = useState([]);
 	const [likedMovies, setLikedMovies] = useState([]);
 	const [filtredMovies, setFiltredMovies] = useState(previouslySearchedMovies || []);
+	const [filtredLikedMovies, setFiltredLikedMovies] = useState([]);
 	const [isApiError, setIsApiError] = useState(false);
 	const [errorData, setErrorData] = useState('');
 	const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
 	const [isLoading, setIsLoading] = useState(true);
 	const [filterValue, setFilterValue] = useState('');
+	const [filterValueLikedMovies, setFilterValueLikedMovies] = useState('');
 	const [isShortMoviesChecked, setIsShortMoviesChecked] = useState(isShortMoviesPreviouslyChecked || false);
 	const [isShortLikedMoviesChecked, setIsShortLikedMoviesChecked] = useState(false);
 	const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
@@ -63,9 +65,11 @@ function App() {
 	// * Get liked movies from MainApi
 	useEffect(() => {
 		setIsLoading(true);
-		getLikedMovies()
-			.then((res) => {
-				setLikedMovies(res);
+		Promise.all([getLikedMovies(), getMovies()])
+			.then(([likedMoviesData, allMoviesData]) => {
+				setLikedMovies(likedMoviesData);
+				setAllMovies(allMoviesData);
+				setFiltredLikedMovies(likedMoviesData);
 			})
 			.finally(() => {
 				setIsLoading(false);
@@ -81,6 +85,7 @@ function App() {
 					([userData, likedMoviesData, allMoviesData]) => {
 						setCurrentUser(userData);
 						setLikedMovies(likedMoviesData);
+						setFiltredLikedMovies(likedMoviesData);
 						setAllMovies(allMoviesData);
 						setIsUserLoggedIn(true);
 						history.push('/movies');
@@ -116,33 +121,29 @@ function App() {
 		history.push('/');
 	}
 
-	// * Get all movies from api, than comare with filter value and return filtred array
+	// * Filtering movies by useEffect on changing value and isShortMoviesChecked
 	useEffect(() => {
-		getMovies()
-			.then((movies) => {
-				setIsLoading(true);
-				setIsDisabledButton(true);
-				setAllMovies(movies);
-				setIsApiError(false);
-				if (filterValue) {
-					const result = movies.filter((movie) => {
-						return movie.nameRU.toLowerCase().includes(filterValue.toLowerCase().trim());
-					});
-					localStorage.setItem('previouslySearchedMovies', JSON.stringify(result));
-					localStorage.setItem('previouslyFilterValue', JSON.stringify(filterValue));
-					return setFiltredMovies(result);
-				}
-			})
-			.catch((err) => {
-				setIsApiError(true);
-				setErrorData(err);
-				setIsErrorModalOpen(true);
-			})
-			.finally(() => {
-				setIsDisabledButton(false);
-				setIsLoading(false);
+		if (filterValue) {
+			const result = allMovies.filter((movie) => {
+				return movie.nameRU.toLowerCase().includes(filterValue.toLowerCase().trim());
 			});
-	}, [filterValue, isShortMoviesChecked, currentUser]);
+			localStorage.setItem('previouslySearchedMovies', JSON.stringify(result));
+			localStorage.setItem('previouslyFilterValue', JSON.stringify(filterValue));
+			setFiltredMovies(result);
+		}
+		setIsDisabledButton(false);
+	}, [filterValue, isShortMoviesChecked]);
+
+	useEffect(() => {
+		if (filterValueLikedMovies) {
+			const result = likedMovies.filter((movie) => {
+				return movie.nameRU.toLowerCase().includes(filterValueLikedMovies.toLowerCase().trim());
+			});
+
+			setFiltredLikedMovies(result);
+		}
+		setIsDisabledButton(false);
+	}, [filterValueLikedMovies, isShortLikedMoviesChecked]);
 
 	function handleCloseModal() {
 		setIsErrorModalOpen(false);
@@ -150,17 +151,13 @@ function App() {
 	}
 
 	function handleChangeFilterValue(searchInputValue) {
+		setIsDisabledButton(true);
 		setFilterValue(searchInputValue);
 	}
 
-	// * Filter of liked movies
-	function handleChangeFilterValueLikedFilms(searchInputValue) {
-		if (searchInputValue) {
-			const result = likedMovies.filter((movies) => {
-				return movies.nameRU.toLowerCase().includes(searchInputValue.toLowerCase());
-			});
-			return setLikedMovies(result);
-		}
+	function handleChangeFilterValueLikedFilms(searchInputValueLikedFilms) {
+		setIsDisabledButton(true);
+		setFilterValueLikedMovies(searchInputValueLikedFilms);
 	}
 
 	function handleChangeShortMoviesCheckbox() {
@@ -194,6 +191,7 @@ function App() {
 	}
 
 	function handleUpdateUserSubmit(email, name) {
+		setIsDisabledButton(true);
 		updateUserProfile(email, name)
 			.then(() => setCurrentUser({ name, email }))
 			.catch((err) => {
@@ -202,10 +200,11 @@ function App() {
 			})
 			.finally(() => {
 				setIsLoading(false);
+				setIsDisabledButton(false);
 			});
 	}
 
-	// * When like is added we send request to MainApi, and after that refreshing liked movies
+	// * When like is added we  don't send request to MainApi,  but pushing new movies to existing array of likedMovies/filtredLikedMovies
 	function handleSaveLikedMovie(
 		country,
 		director,
@@ -221,10 +220,10 @@ function App() {
 	) {
 		setIsDisabledButton(true);
 		saveLikedMovieApi(country, director, duration, year, description, image, trailerLink, thumbnail, id, nameRU, nameEN)
-			.then(() => {
-				getLikedMovies().then((res) => {
-					setLikedMovies(res);
-				});
+			.then((res) => {
+				likedMovies.push(res);
+				setLikedMovies(likedMovies);
+				setFiltredLikedMovies(likedMovies);
 				setIsDisabledButton(false);
 			})
 			.catch((err) => {
@@ -240,7 +239,9 @@ function App() {
 		if (_id) {
 			deleteLikedMovieApi(_id)
 				.then((res) => {
-					setLikedMovies(likedMovies.filter((likedMovie) => likedMovie._id !== res._id));
+					const filtred = likedMovies.filter((likedMovie) => likedMovie._id !== res._id);
+					setLikedMovies(filtred);
+					setFiltredLikedMovies(filtred);
 					setIsDisabledButton(false);
 				})
 				.catch((err) => {
@@ -252,6 +253,7 @@ function App() {
 			setIsDisabledButton(true);
 			const selectedMovie = likedMovies.find((item) => item.movieId === id);
 			setLikedMovies(likedMovies.filter((item) => item.movieId !== id));
+			setFiltredLikedMovies(likedMovies.filter((item) => item.movieId !== id));
 			if (selectedMovie) {
 				deleteLikedMovieApi(selectedMovie._id).finally(() => {
 					setIsDisabledButton(false);
@@ -295,7 +297,7 @@ function App() {
 						exact
 						path='/saved-movies'
 						component={SavedMovies}
-						films={filterShortLikedMovies(likedMovies)}
+						films={filterShortLikedMovies(filtredLikedMovies)}
 						isLoading={isLoading}
 						isApiError={isApiError}
 						isErrorModalOpen={isErrorModalOpen}
@@ -321,6 +323,7 @@ function App() {
 						errorData={errorData}
 						onLogout={handleLogoutUser}
 						isLoading={isLoading}
+						isDisabledButton={isDisabledButton}
 					/>
 					{/* If user loggedin exist user aren't allowed to go to Register or Login */}
 					<Route exact path='/signup'>

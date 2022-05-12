@@ -15,6 +15,7 @@ function Profile({
 	isErrorModalOpen,
 	errorData,
 	onLogout,
+	isDisabledButton,
 }) {
 	const currentUser = useContext(CurrentUserContext);
 	const [name, setName] = useState('');
@@ -119,7 +120,13 @@ function Profile({
 					<h2 className='profile__form-title'>Введите новые данные</h2>
 					<label className='profile__form-label'>
 						Имя
-						<input className='profile__input' type='text' value={name || ''} onChange={handleInputNameChange} />
+						<input
+							className='profile__input'
+							type='text'
+							value={name || ''}
+							onChange={handleInputNameChange}
+							disabled={isDisabledButton}
+						/>
 						{!isNameValid && (
 							<span className='profile__input-span-error' id='email-input-error'>
 								{errorValidationName}
@@ -128,7 +135,13 @@ function Profile({
 					</label>
 					<label className='profile__form-label'>
 						Email
-						<input className='profile__input' type='email' value={email || ''} onChange={handleInputEmailChange} />
+						<input
+							className='profile__input'
+							type='email'
+							value={email || ''}
+							onChange={handleInputEmailChange}
+							disabled={isDisabledButton}
+						/>
 						{!isEmailValid && (
 							<span className='profile__input-span-error' id='email-input-error'>
 								{errorValidationEmail}

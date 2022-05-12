@@ -40,6 +40,7 @@ function SearchForm({
 					value={movie ?? ''}
 					onChange={handleChangeMovie}
 					placeholder='Название фильма'
+					disabled={isDisabledButton}
 				/>
 
 				<button className='search__form-button' disabled={isDisabledButton}></button>
