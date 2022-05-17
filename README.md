@@ -5,7 +5,7 @@ This project was building with [Create React App](https://github.com/facebook/cr
 ## Description:
 
 - Register
-- Ligin and authoriztion
+- Login and authoriztion
 - Get movies from api (https://api.nomoreparties.co/beatfilm-movies)
 - Get and post users from api(https://github.com/BakayAlexander/movies-explorer-api)
 - Search and like movies
