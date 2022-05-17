@@ -34,7 +34,7 @@ The page will reload when you make changes.
 - :sunglasses: Create React App (CRA)
 - :fire: React
 - :shoe: CodeStyle - Prettier;
-- :love_hotel: Public film Api - [Beat Film](https://api.nomoreparties.co/beatfilm-movies)
+- :movie_camera: Public film Api - [Beat Film](https://api.nomoreparties.co/beatfilm-movies)
 - :love_hotel: Private user Api - [MoviesExplorer Api](https://github.com/BakayAlexander/movies-explorer-api)
 - :dress: Styling - BEM
 
