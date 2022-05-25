@@ -1,47 +1,111 @@
 import React from 'react';
+import {
+	DEFAULT_DATA_NOT_AVAILABLE,
+	DEFAULT_TRAILER_NOT_AVAILABLE,
+	DEFAULT_URL_NOT_AVAILABLE,
+	MOVIES_URL,
+} from '../../utils/config';
 import './MoviesCard.css';
 
-function MoviesCard({ id, name, duration, image, alt, isLikeButton, isDeleteButton, ...props }) {
-	// const [isLiked, setIsLiked] = React.useState(false);
+function MoviesCard({
+	film,
+	isAllMovies,
+	isSavedMovies,
+	handleSaveLikedMovie,
+	onDeleteMovie,
+	likedMovies,
+	isDisabledButton,
+}) {
+	const isMobile = window.screen.width <= 1024;
 
 	function showDeleteIcon(e) {
-		if (!isDeleteButton) return;
+		if (!isSavedMovies) return;
 		const card = e.currentTarget;
 		const button = card.querySelector('.movies-card__delete-button');
 		button.classList.add('movies-card__delete-button_active');
 	}
 
 	function hideDeleteIcon(e) {
-		if (!isDeleteButton) return;
+		if (!isSavedMovies) return;
 		const card = e.currentTarget;
 		const button = card.querySelector('.movies-card__delete-button');
 		button.classList.remove('movies-card__delete-button_active');
 	}
 
 	function handleLikeClick(e) {
-		if (!isLikeButton) return;
+		if (!isAllMovies) return;
 		const button = e.currentTarget;
-		button.classList.toggle('movies-card__like-button_active');
+		if (!button.classList.contains('movies-card__like-button_active')) {
+			handleSaveLikedMovie(
+				film.country || DEFAULT_DATA_NOT_AVAILABLE,
+				film.director || DEFAULT_DATA_NOT_AVAILABLE,
+				film.duration || 1,
+				film.year || DEFAULT_DATA_NOT_AVAILABLE,
+				film.description || DEFAULT_DATA_NOT_AVAILABLE,
+				MOVIES_URL + film.image.url || DEFAULT_URL_NOT_AVAILABLE,
+				film.trailerLink || DEFAULT_TRAILER_NOT_AVAILABLE,
+				MOVIES_URL + film.image.formats.thumbnail.url || DEFAULT_URL_NOT_AVAILABLE,
+				film.id,
+				film.nameRU || DEFAULT_DATA_NOT_AVAILABLE,
+				film.nameEN || DEFAULT_DATA_NOT_AVAILABLE
+			);
+			button.classList.add('movies-card__like-button_active');
+		} else if (button.classList.contains('movies-card__like-button_active')) {
+			hadleClickDeleteButton();
+			button.classList.remove('movies-card__like-button_active');
+		}
+	}
+
+	function hadleClickDeleteButton() {
+		onDeleteMovie(film._id, film.id);
+	}
+
+	function miutesToHours(time) {
+		if (time <= 60) {
+			return `${time}м`;
+		}
+		let mins = time % 60;
+		let hours = (time - mins) / 60;
+		return `${hours}ч ${mins}м`;
 	}
 
 	return (
-		<li className='movies-card' onMouseEnter={showDeleteIcon} onMouseLeave={hideDeleteIcon}>
-			<img className='movies-card__image' src='https://artfiles.alphacoders.com/357/35757.jpg' alt={alt} />
+		<li className='movies-card' onMouseOver={showDeleteIcon} onMouseLeave={hideDeleteIcon}>
+			<a className='movies-card__trailer-link' href={film.trailerLink} target='_blank' rel='noreferrer'>
+				<img
+					className='movies-card__image'
+					src={isAllMovies ? MOVIES_URL + film.image.url : film.image}
+					alt={film.image.name}
+				/>
+			</a>
 			<div className='movies-card__description'>
 				<div className='movies-card__text-container'>
-					<h3 className='movies-card__title'>{name}</h3>
-					<p className='movies-card__duration'>{duration}м</p>
+					<h3 className='movies-card__title'>{film.nameRU || film.nameEN}</h3>
+					<p className='movies-card__duration'>{miutesToHours(film.duration)}</p>
 				</div>
 				<button
-					className={`${isLikeButton ? 'movies-card__like-button' : 'movies-card__like-button_disable'}`}
+					className={
+						isAllMovies
+							? 'movies-card__like-button' +
+							  ' ' +
+							  (likedMovies.some((likedMovie) => likedMovie.movieId === film.id)
+									? 'movies-card__like-button_active'
+									: '')
+							: 'movies-card__like-button_disable'
+					}
 					type='button'
 					aria-label='Отметить понравимшимся'
 					onClick={handleLikeClick}
+					disabled={isDisabledButton}
 				></button>
 				<button
-					className={` ${isDeleteButton ? 'movies-card__delete-button' : 'movies-card__delete-button_disable'}`}
+					className={` ${isSavedMovies ? 'movies-card__delete-button' : 'movies-card__delete-button_disable'} ${
+						isMobile && 'movies-card__delete-button_active'
+					}`}
 					type='button'
 					aria-label='Удалить карточку'
+					onClick={hadleClickDeleteButton}
+					disabled={isDisabledButton}
 				></button>
 			</div>
 		</li>

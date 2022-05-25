@@ -1,30 +1,33 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './Header.css';
 import Logo from '../Logo/Logo';
 import { Link } from 'react-router-dom';
 import BurgerMenu from '../BurgerMenu/BurgerMenu';
+import { NavLink } from 'react-router-dom';
 
-function Header(props) {
-	const [isBurgerMenuOpen, setIsBurgerMenuOpen] = React.useState(false);
+function Header({ isUserLoggedIn }) {
+	const [isBurgerMenuOpen, setIsBurgerMenuOpen] = useState(false);
 
 	function handleToogleBurgerMenu() {
 		setIsBurgerMenuOpen(!isBurgerMenuOpen);
 	}
 
+	const className = isUserLoggedIn ? 'loggedin' : 'loggedout';
+
 	return (
-		<header className={`header ${props.className}`}>
+		<header className={`header ${className}`}>
 			<nav className='header__container'>
 				<Logo />
-				<button className={`header__burger-menu-open-button_${props.className}`} onClick={handleToogleBurgerMenu} />
-				<div className={`header__movies-links_${props.className}`}>
-					<Link className='header__movies-link' to='/movies'>
+				<button className={`header__burger-menu-open-button_${className}`} onClick={handleToogleBurgerMenu} />
+				<nav className={`header__movies-links_${className}`}>
+					<NavLink className='header__movies-link' exact to='/movies' activeClassName='header__link_active'>
 						Фильмы
-					</Link>
-					<Link className='header__saved-movies-link' to='/saved-movies'>
+					</NavLink>
+					<NavLink className='header__saved-movies-link' exact to='/saved-movies' activeClassName='header__link_active'>
 						Сохраненные фильмы
-					</Link>
-				</div>
-				<div className={`header__auth-links_${props.className}`}>
+					</NavLink>
+				</nav>
+				<div className={`header__auth-links_${className}`}>
 					<Link className='header__register-link' to='/signup'>
 						Регистрация
 					</Link>
@@ -32,12 +35,12 @@ function Header(props) {
 						Войти
 					</Link>
 				</div>
-				<div className={`header__profile-links_${props.className}`}>
-					<Link className='header__profile-link' to='/profile'>
+				<nav className={`header__profile-links_${className}`}>
+					<NavLink className='header__profile-link' to='/profile' activeClassName='header__link_active'>
 						Аккаунт
-					</Link>
-					<Link className='header__profile-icon-link' to='/profile'></Link>
-				</div>
+					</NavLink>
+					<NavLink className='header__profile-icon-link' to='/profile'></NavLink>
+				</nav>
 			</nav>
 			<BurgerMenu isOpen={isBurgerMenuOpen} onClose={handleToogleBurgerMenu} />
 		</header>

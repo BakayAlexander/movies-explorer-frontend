@@ -29,6 +29,14 @@
 	padding-left: 20px;
 }
 
+.search__form-error {
+	margin-top: 10px;
+	font-size: 10px;
+	line-height: 12px;
+	font-weight: 400;
+	color: #ee3465;
+}
+
 .search__form-input:focus {
 	outline: 1px solid #4285f4;
 }
